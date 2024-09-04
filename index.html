@@ -3,28 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Investimento</title>
+    <title>Simulador | Renda Fixa</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <div class="form-section">
-            <h1>Simulador de Investimento</h1>
+        <section class="form-section">
+            <h1>Investimento</h1>
             <div class="form-group">
                 <label for="valorInvestido">Valor Inicial da Aplicação (R$):</label>
                 <input type="number" id="valorInvestido" step="0.01" required>
             </div>
-            <div class="form-group">
-                <label for="meses">Quanto Tempo (em meses):</label>
-                <input type="number" id="meses" required>
+            <div class="form-group period-group">
+                <div class="period-input">
+                    <label for="tempo">Vencimento:</label>
+                    <input type="number" id="tempo" required>
+                </div>
+                <div class="period-select">
+                    <label for="unidadeTempo">Tipo de Período:</label>
+                    <select id="unidadeTempo">
+                        <option value="dias">Dias</option>
+                        <option value="meses" selected>Meses</option>
+                        <option value="anos">Anos</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="result-section">
-            <h2>Resultados</h2>
+        </section>
+        <section class="result-section">
+            <h2>Simulação de Rendimento</h2>
             <div id="resultadoPoupanca" class="result-item"></div>
-            <div id="resultadoCDB" class="result-item"></div>
-            <div id="resultadoLCI" class="result-item"></div>
-        </div>
+            <div id="resultadoCDB-RDB" class="result-item"></div>
+            <div id="resultadoLCI-LCA" class="result-item"></div>
+        </section>
     </div>
     <script src="script.js"></script>
 </body>

@@ -1,65 +1,151 @@
-/* styles.css */
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+/* CSS Atualizado para acomodar o novo layout */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e9ecef;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    margin: 0;
 }
 
 .container {
     display: flex;
     width: 90%;
     max-width: 1200px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .form-section, .result-section {
     padding: 20px;
-    box-sizing: border-box;
     width: 50%;
+    box-sizing: border-box;
 }
 
 .form-section {
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #dee2e6;
+    background: #f8f9fa;
 }
 
 h1, h2 {
-    text-align: center;
+    color: #343a40;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 20px;
     margin-top: 0;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: bold;
 }
 
-input {
+input, select {
     width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input:focus, select:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+}
+
+.result-section {
+    background: #ffffff;
 }
 
 .result-item {
     margin-bottom: 20px;
-    padding: 10px;
-    background: #f9f9f9;
-    border-radius: 4px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    color: #495057;
 }
 
-#resultadoPoupanca, #resultadoCDB, #resultadoLCI {
-    font-size: 16px;
+.result-item h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #007bff;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .form-section, .result-section {
+        width: 100%;
+        border-right: none;
+    }
+
+    .form-section {
+        border-bottom: 1px solid #dee2e6;
+    }
+}
+
+.period-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.period-input, .period-select {
+    flex: 1;
+}
+
+.period-input {
+    margin-right: 10px;
+}
+
+.ir-icon {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.ir-22-5 {
+    background-color: #e74c3c;
+}
+
+.ir-20 {
+    background-color: #f1c40f;
+}
+
+.ir-17-5 {
+    background-color: #f1c40f;
+}
+
+.ir-15 {
+    background-color: #2ecc71;
 }
