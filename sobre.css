@@ -1,0 +1,140 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Alinhar conteúdo em coluna */
+    min-height: 100vh; /* Garantir altura mínima de tela */
+    align-items: center; /* Alinhamento horizontal ao centro */
+}
+
+header {
+    width: 100%; /* Largura total do cabeçalho */
+    position: fixed; /* Fixa o cabeçalho no topo */
+    top: 0;
+    right: 0;
+    z-index: 1000; /* Garante que o cabeçalho esteja acima de outros elementos */
+    display: flex;
+    justify-content: flex-end; /* Alinha o conteúdo ao final do cabeçalho */
+    padding: 10px; /* Padding ao redor da barra de navegação */
+}
+
+.navbar {
+    display: flex;
+    align-items: center; /* Alinha os itens verticalmente */
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.nav-links li {
+    margin: 0; /* Remove margens laterais */
+}
+
+.nav-links a {
+    color: #333; /* Cor do ícone */
+    text-decoration: none;
+    font-size: 25px; /* Reduzido para 20px */
+    transition: color 0.3s ease; /* Transição de cor */
+}
+
+.nav-links a:hover {
+    color: #007bff; /* Cor ao passar o mouse */
+}
+
+/* Ajuste do container principal */
+main.container {
+    width: 100%;
+    max-width: 900px; /* Manter o tamanho máximo do container */
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
+    border-radius: 10px; /* Bordas arredondadas */
+    padding: 20px;
+    box-sizing: border-box; /* Inclui padding e bordas na largura total */
+    margin-top: 60px; /* Espaçamento aumentado abaixo do cabeçalho fixo */
+    display: flex;
+    flex-direction: column; /* Coluna para conteúdo */
+    gap: 12px; /* Espaçamento entre containers */
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px; /* Margem reduzida embaixo do título */
+    font-size: 26px; /* Fonte ajustada */
+    font-weight: 600; /* Peso de fonte moderado */
+}
+
+.central-image {
+    display: block;
+    margin: 20px auto; /* Centraliza a imagem horizontalmente e adiciona margem acima e abaixo */
+    max-width: 20%; 
+    height: auto; /* Mantém a proporção da imagem */
+}
+
+p {
+    margin-bottom: 3px; /* Reduzido o espaço entre parágrafos */
+}
+
+.social-links-container {
+    text-align: center; /* Centraliza o texto dentro do contêiner */
+    margin-top: 30px; /* Espaço acima dos links de redes sociais */
+}
+
+.social-links-container h2 {
+    font-size: 24px; /* Reduzido para 24px */
+    color: #333; /* Cor do título */
+    margin-bottom: 20px; /* Espaço abaixo do título */
+}
+
+.social-links {
+    display: flex;
+    justify-content: center; /* Centraliza os ícones horizontalmente */
+    gap: 20px; /* Espaçamento ajustado entre os ícones */
+}
+
+.social-links a {
+    text-decoration: none; /* Remove sublinhado dos links */
+    display: flex; /* Usa flexbox para centralizar o texto ao lado dos ícones */
+    align-items: center; /* Alinha verticalmente o texto com os ícones */
+    gap: 5px; /* Espaçamento entre o ícone e o texto */
+    padding: 8px; /* Padding ao redor dos ícones */
+    font-size: 20px; /* Tamanho dos ícones */
+    border-radius: 5px; /* Bordas arredondadas para os ícones */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave para cor de fundo e texto */
+}
+
+.social-links a.linkedin {
+    color: #fff; /* Cor do texto dos links */
+    background-color: #0077b5; /* Cor de fundo para LinkedIn */
+}
+
+.social-links a.github {
+    color: #fff; /* Cor do texto dos links */
+    background-color: #181717; /* Cor de fundo para GitHub */
+}
+
+.social-links a:hover {
+    opacity: 0.8; /* Reduz a opacidade ao passar o mouse para um efeito visual */
+}
+
+.social-links i {
+    font-size: 18px; /* Tamanho dos ícones */
+}
+
+.social-links span {
+    font-size: 14px; /* Tamanho do texto ao lado dos ícones */
+}
+
+footer {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 15px;
+    color: #666;
+}

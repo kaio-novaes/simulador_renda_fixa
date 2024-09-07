@@ -5,37 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador | Renda Fixa</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
 </head>
 <body>
+    <header>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="sobre.html" title="Sobre"><i class="fas fa-info-circle"></i></a></li>
+            </ul>
+        </nav>
+    </header>
     <div class="container">
-        <section class="form-section">
-            <h1>Investimento</h1>
+        <div class="form-container">
+            <h1>Investimentos</h1>
             <div class="form-group">
-                <label for="valorInvestido">Valor Inicial da Aplicação (R$):</label>
-                <input type="number" id="valorInvestido" step="0.01" required>
+                <label for="valorInvestido">Valor da Aplicação</label>
+                <input type="number" id="valorInvestido" class="input-group__input" value="1000" placeholder="Valor em R$" min="0" required>
             </div>
-            <div class="form-group period-group">
-                <div class="period-input">
-                    <label for="tempo">Vencimento:</label>
-                    <input type="number" id="tempo" required>
-                </div>
-                <div class="period-select">
-                    <label for="unidadeTempo">Tipo de Período:</label>
-                    <select id="unidadeTempo">
+
+            <div class="form-group">
+                <label for="tempo">Vencimento</label>
+                <div class="period-group">
+                    <input type="number" id="tempo" class="period-input" value="365" placeholder="Número" min="1" required>
+                    <select id="unidadeTempo" class="period-select">
                         <option value="dias">Dias</option>
-                        <option value="meses" selected>Meses</option>
+                        <option value="meses">Meses</option>
                         <option value="anos">Anos</option>
                     </select>
                 </div>
             </div>
-        </section>
-        <section class="result-section">
-            <h2>Simulação de Rendimento</h2>
+
+            <div class="form-group">
+                <label for="taxa-di">Taxa DI</label>
+                <input type="number" id="taxa-di" class="input-group__input" placeholder="% ao ano" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="taxa-selic">Taxa SELIC</label>
+                <input type="number" id="taxa-selic" class="input-group__input" placeholder="% ao ano" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cdb-rdb">CDB/RDB</label>
+                <input type="number" id="cdb-rdb" class="input-group__input" placeholder="% DI" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lci-lca">LCI/LCA</label>
+                <input type="number" id="lci-lca" class="input-group__input" placeholder="% DI" step="0.01" min="0" required>
+            </div>
+
+            <div class="button-group">
+                <button id="calcular" class="btn-calcular">Calcular</button>
+            </div>
+        </div>
+
+        <div class="results-container">
+            <h2>Simulação</h2>
+            <p>Rentabilidade do seu investimento de acordo com o tipo de aplicação.</p>
             <div id="resultadoPoupanca" class="result-item"></div>
             <div id="resultadoCDB-RDB" class="result-item"></div>
             <div id="resultadoLCI-LCA" class="result-item"></div>
-        </section>
+            <div class="warning-message">
+                <i class="fas fa-exclamation-triangle"></i> Simulação baseada na data de hoje, utilizando as taxas mais recentes disponibilizadas pelo Banco Central do Brasil.
+            </div>
+        </div>
     </div>
+    <footer>
+        <p>&copy; 2024 Kaio Novaes. Todos os direitos reservados.</p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>

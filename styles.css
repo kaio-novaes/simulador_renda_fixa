@@ -1,151 +1,198 @@
-/* CSS Atualizado para acomodar o novo layout */
-* {
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* Alinhar conteúdo em coluna */
+    min-height: 100vh; /* Garantir altura mínima de tela */
+    align-items: center; /* Alinhamento horizontal ao centro */
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e9ecef;
+header {
+    width: 100%; /* Largura total do cabeçalho */
+    position: fixed; /* Fixa o cabeçalho no topo */
+    top: 0;
+    right: 0;
+    z-index: 1000; /* Garante que o cabeçalho esteja acima de outros elementos */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    justify-content: flex-end; /* Alinha o conteúdo ao final do cabeçalho */
+    padding: 10px; /* Padding ao redor da barra de navegação */
+}
+
+.navbar {
+    display: flex;
+    align-items: center; /* Alinha os itens verticalmente */
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
     margin: 0;
+    display: flex;
+}
+
+.nav-links li {
+    margin: 0; /* Remove margens laterais */
+}
+
+.nav-links a {
+    color: #333; /* Cor do ícone */
+    text-decoration: none;
+    font-size: 25px; /* Tamanho do ícone */
+    transition: color 0.3s ease; /* Transição de cor */
+}
+
+.nav-links a:hover {
+    color: #007bff; /* Cor ao passar o mouse */
 }
 
 .container {
-    display: flex;
-    width: 90%;
-    max-width: 1200px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    width: 100%;
+    max-width: 1200px; /* Aumenta o tamanho máximo dos containers */
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
+    border-radius: 10px; /* Bordas arredondadas */
+    padding: 15px; /* Reduz o padding interno */
+    box-sizing: border-box; /* Inclui padding e bordas na largura total */
+    margin-top: 40px; /* Diminui o espaçamento abaixo do cabeçalho fixo */
+    display: flex; /* Layout flexível */
+    flex-direction: row; /* Alinhar os containers lado a lado */
+    gap: 15px; /* Reduz o espaçamento entre os containers */
 }
 
-.form-section, .result-section {
-    padding: 20px;
-    width: 50%;
-    box-sizing: border-box;
+.form-container, .results-container {
+    flex: 1; /* Usa espaço disponível de forma flexível */
+    background: #fafafa; /* Cor de fundo suave */
+    border-radius: 8px;
+    padding: 10px; /* Reduz o padding interno */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+    border: 1px solid #e0e0e0; /* Borda leve */
+    box-sizing: border-box; /* Inclui padding e bordas na largura total */
+    min-width: 0; /* Evita que os containers fiquem menores que o necessário */
 }
 
-.form-section {
-    border-right: 1px solid #dee2e6;
-    background: #f8f9fa;
+.form-container {
+    margin-top: 0; /* Remove margem superior no container de formulário */
 }
 
-h1, h2 {
-    color: #343a40;
-    margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 24px;
-}
-
-h2 {
-    font-size: 20px;
-    margin-top: 0;
+.results-container {
+    margin-top: 0; /* Remove margem superior no container de resultados */
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Reduz o espaçamento entre campos */
 }
 
 label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
+    margin-bottom: 4px; /* Menos espaçamento abaixo do rótulo */
+    font-weight: 550; /* Peso de fonte moderado */
+    color: #444; /* Cor um pouco mais escura para contraste */
 }
 
-input, select {
+input[type="text"],
+input[type="number"] {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-input:focus, select:focus {
-    border-color: #80bdff;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
-}
-
-.result-section {
-    background: #ffffff;
-}
-
-.result-item {
-    margin-bottom: 20px;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 16px;
-    color: #495057;
-}
-
-.result-item h3 {
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #007bff;
-}
-
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        width: 100%;
-        border-radius: 0;
-    }
-
-    .form-section, .result-section {
-        width: 100%;
-        border-right: none;
-    }
-
-    .form-section {
-        border-bottom: 1px solid #dee2e6;
-    }
+    padding: 10px; /* Reduz o padding interno dos campos */
+    border: 1px solid #ddd; /* Borda leve */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 14px; /* Reduz o tamanho da fonte */
+    box-sizing: border-box;
 }
 
 .period-group {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.period-input, .period-select {
-    flex: 1;
+    display: flex; /* Layout flexível para os campos de tempo */
+    align-items: center; /* Alinha verticalmente os itens */
+    gap: 10px; /* Espaçamento entre o input e o seletor */
 }
 
 .period-input {
-    margin-right: 10px;
+    flex: 1; /* Usa o espaço restante disponível */
+    padding: 10px; /* Padding interno ajustado */
+    border: 1px solid #ddd; /* Borda leve */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 14px; /* Tamanho da fonte ajustado */
 }
 
-.ir-icon {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    vertical-align: middle;
-    margin-right: 5px;
+.period-select {
+    flex-shrink: 0; /* Não reduz o tamanho do seletor */
+    width: auto; /* Ajusta a largura do seletor ao conteúdo */
+    padding: 10px; /* Padding interno ajustado */
+    border: 1px solid #ddd; /* Borda leve */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 14px; /* Tamanho da fonte ajustado */
+    background-color: #fafafa; /* Cor de fundo suave */
+    appearance: none; /* Remove a aparência padrão do seletor */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra interna leve */
 }
 
-.ir-22-5 {
-    background-color: #e74c3c;
+.period-select::-ms-expand {
+    display: none; /* Remove o ícone padrão de dropdown no IE */
 }
 
-.ir-20 {
-    background-color: #f1c40f;
+.button-group {
+    display: flex;
+    gap: 8px; /* Reduz o espaçamento entre botões */
+    justify-content: flex-end; /* Alinhamento dos botões à direita */
 }
 
-.ir-17-5 {
-    background-color: #f1c40f;
+/* Estilos do botão de calcular */
+.btn-calcular {
+    background-color: #007bff; /* Cor de fundo azul */
+    color: #fff; /* Cor do texto branco */
+    border: none; /* Remove a borda padrão */
+    border-radius: 5px; /* Arredondamento dos cantos */
+    padding: 10px 18px; /* Ajusta o padding interno do botão */
+    font-size: 14px; /* Reduz o tamanho do texto */
+    font-weight: 600; /* Peso do texto em negrito */
+    cursor: pointer; /* Cursor de ponteiro ao passar sobre o botão */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transição suave para efeitos de hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 
-.ir-15 {
-    background-color: #2ecc71;
+.btn-calcular:hover {
+    background-color: #0056b3; /* Cor de fundo mais escura ao passar o mouse */
+    transform: scale(1.02); /* Efeito de zoom ao passar o mouse */
+}
+
+.btn-calcular:focus {
+    outline: none; /* Remove o contorno padrão ao focar no botão */
+    box-shadow: 0 0 0 2px rgba(38, 143, 255, 0.5); /* Sombra de foco ao focar no botão */
+}
+
+#results {
+    margin-top: 10px; /* Espaçamento reduzido acima dos resultados */
+}
+
+.result-item {
+    margin-bottom: 8px; /* Reduz o espaçamento abaixo de cada resultado */
+    padding: 10px; /* Padding ajustado */
+    border: 1px solid #e0e0e0; /* Borda leve */
+    border-radius: 8px; /* Bordas arredondadas */
+    background-color: #ffffff; /* Cor de fundo neutra */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Sombra leve */
+    transition: box-shadow 0.2s ease; /* Transição suave */
+}
+
+.result-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada ao passar o mouse */
+}
+
+.warning-message {
+    margin-top: 15px; /* Espaço acima da mensagem de aviso */
+    padding: 10px; /* Padding ajustado para maior espaçamento interno */
+    background-color: #fff3cd; /* Cor de fundo amarela clara */
+    border: 1px solid #ffeeba; /* Borda amarela clara */
+    border-radius: 8px; /* Bordas arredondadas */
+    color: #856404; /* Cor do texto */
+    font-size: 14px; /* Tamanho do texto ajustado */
+}
+
+footer {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px; /* Ajusta o tamanho da fonte do rodapé */
+    color: #666;
 }
