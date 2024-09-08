@@ -1,3 +1,24 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Função para formatar a data como 'DD/MM'
+    function formatarData(data) {
+        const dia = String(data.getDate()).padStart(2, '0');
+        const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses são baseados em 0
+        return `${dia}/${mes}`;
+    }
+
+    // Função para atualizar o elemento com a data atual
+    function atualizarDataAtual() {
+        const elementoData = document.getElementById('dataAtual');
+        const dataAtual = new Date();
+        const dataFormatada = formatarData(dataAtual);
+        elementoData.setAttribute('data-value', dataFormatada);
+        elementoData.textContent = dataFormatada;
+    }
+
+    // Chama a função ao carregar a página
+    atualizarDataAtual();
+});
+
 // Função para obter a taxa de poupança
 async function obterTaxaPoupanca() {
     const url = 'https://api.bcb.gov.br/dados/serie/bcdata.sgs.195/dados/ultimos/1?formato=json';
@@ -13,11 +34,12 @@ async function obterTaxaPoupanca() {
 }
 
 // Função para calcular rendimento da poupança
-function calcularRendimentoPoupanca(valorInvestido, taxaMensal, meses) {
-    const taxaPoupanca = taxaMensal / 100;
+function calcularRendimentoPoupanca(valorInvestido, taxaAnual, dias) {
+    const taxaDiaria = (1 + taxaAnual / 100) ** (1 / 365) - 1;
+    const periodos = dias;
     let rendimentoBruto = valorInvestido;
-    for (let i = 0; i < meses; i++) {
-        rendimentoBruto += rendimentoBruto * taxaPoupanca;
+    for (let i = 0; i < periodos; i++) {
+        rendimentoBruto += rendimentoBruto * taxaDiaria;
     }
     return rendimentoBruto;
 }
@@ -37,10 +59,10 @@ async function obterTaxaDI() {
 }
 
 // Função para calcular rendimento de CDB/RDB
-function calcularRendimentoCDB(valorInvestido, taxaDI, meses) {
-    const taxaDiaria = (1 + taxaDI / 100) ** (1 / 12) - 1;
+function calcularRendimentoCDB(valorInvestido, taxaDI, dias) {
+    const taxaDiaria = (1 + taxaDI / 100) ** (1 / 365) - 1;
     let valorFinal = valorInvestido;
-    for (let i = 0; i < meses; i++) {
+    for (let i = 0; i < dias; i++) {
         valorFinal *= (1 + taxaDiaria);
     }
     return valorFinal;
@@ -54,9 +76,13 @@ function calcularAliquotaIR(dias) {
     return 15;
 }
 
+// Tabela de IOF
+const iofTable = [96, 93, 90, 86, 83, 80, 76, 73, 70, 66, 63, 60, 56, 53, 50, 46, 43, 40, 36, 33, 30, 26, 23, 20, 16, 13, 10, 6, 3, 0];
+
 // Função para calcular o IOF
 function calcularIOF(valorInvestido, rendimentoBruto, dias) {
-    const aliquotaIOF = dias <= 30 ? 96 / 100 : 0; // IOF de 96% sobre o rendimento nos primeiros 30 dias
+    const index = Math.min(dias - 1, 29); // O índice vai de 0 a 29 para 30 dias
+    const aliquotaIOF = iofTable[index] / 100; // Convertendo para uma taxa decimal
     const rendimento = rendimentoBruto - valorInvestido;
     return rendimento * aliquotaIOF;
 }
@@ -67,25 +93,26 @@ async function obterTaxaLCX() {
 }
 
 // Função para calcular rendimento de LCI/LCA
-function calcularRendimentoLCX(valorInvestido, taxaDI, meses) {
-    const taxaDiaria = (1 + taxaDI / 100) ** (1 / 12) - 1;
+function calcularRendimentoLCX(valorInvestido, taxaDI, dias) {
+    const taxaDiaria = (1 + taxaDI / 100) ** (1 / 365) - 1;
     let valorFinal = valorInvestido;
-    for (let i = 0; i < meses; i++) {
+    for (let i = 0; i < dias; i++) {
         valorFinal *= (1 + taxaDiaria);
     }
     return valorFinal;
 }
 
-// Função para converter unidades de tempo para meses
-function converterParaMeses(tempo, unidade) {
+// Função para converter unidades de tempo para dias
+function converterParaDias(tempo, unidade) {
     switch (unidade) {
         case 'dias':
-            return Math.ceil(tempo / 30); // Aproxima para cima
-        case 'anos':
-            return Math.ceil(tempo * 12); // Converte anos para meses
-        case 'meses':
-        default:
             return tempo;
+        case 'meses':
+            return Math.round(tempo * 30.41); // Aproxima para o número médio de dias por mês
+        case 'anos':
+            return Math.round(tempo * 365); // Aproxima para o número de dias por ano
+        default:
+            throw new Error('Unidade de tempo desconhecida');
     }
 }
 
@@ -99,19 +126,19 @@ async function atualizarResultados() {
         return;
     }
 
-    const meses = converterParaMeses(tempo, unidade);
-    const dias = tempo * (unidade === 'anos' ? 365 : (unidade === 'meses' ? 30 : 1));
+    const dias = converterParaDias(tempo, unidade);
 
     // Atualiza o resultado da poupança
     const taxaPoupanca = await obterTaxaPoupanca();
     if (taxaPoupanca !== null) {
-        const rendimentoLiquido = calcularRendimentoPoupanca(valorInvestido, taxaPoupanca, meses);
-        const rendimentoBruto = rendimentoLiquido - valorInvestido;
+        const rendimentoBrutoPoupanca = calcularRendimentoPoupanca(valorInvestido, taxaPoupanca, dias) - valorInvestido;
+        const rendimentoLiquidoPoupanca = valorInvestido + rendimentoBrutoPoupanca;
+
         document.getElementById("resultadoPoupanca").innerHTML = `
             <h3>Poupança</h3>
             Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
-            Rendimento Bruto: R$ ${rendimentoBruto.toFixed(2)}<br>
-            Valor Líquido: R$ ${rendimentoLiquido.toFixed(2)}
+            Rendimento Bruto: R$ ${rendimentoBrutoPoupanca.toFixed(2)}<br>
+            Valor Líquido: R$ ${rendimentoLiquidoPoupanca.toFixed(2)}
         `;
     } else {
         document.getElementById("resultadoPoupanca").innerHTML = `<h3>Poupança</h3> Não foi possível obter a taxa de poupança.`;
@@ -120,12 +147,12 @@ async function atualizarResultados() {
     // Atualiza o resultado do CDB/RDB
     const taxaDI = await obterTaxaDI();
     if (taxaDI !== null) {
-        const rendimentoTotal = calcularRendimentoCDB(valorInvestido, taxaDI, meses);
-        const rendimentoBruto = rendimentoTotal - valorInvestido;
+        const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI, dias) - valorInvestido;
+        const ioef = calcularIOF(valorInvestido, rendimentoBrutoCDB + valorInvestido, dias);
+        const rendimentoBrutoComIOF = rendimentoBrutoCDB - ioef;
         const aliquotaIR = calcularAliquotaIR(dias);
-        const ir = rendimentoBruto * (aliquotaIR / 100);
-        const ioef = calcularIOF(valorInvestido, rendimentoTotal, dias);
-        const rendimentoLiquido = valorInvestido + rendimentoBruto - ir - (ioef > 0 ? ioef : 0);
+        const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
+        const rendimentoLiquidoCDB = valorInvestido + rendimentoBrutoComIOF - ir;
 
         let irClass = '';
         if (aliquotaIR <= 180) irClass = 'ir-22-5';
@@ -137,9 +164,9 @@ async function atualizarResultados() {
             <h3>CDB/RDB</h3>
             Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
             ${ioef > 0 ? `IOF: R$ ${ioef.toFixed(2)}<br>` : ''}
-            Rendimento Bruto: R$ ${rendimentoBruto.toFixed(2)}<br>
+            Rendimento Bruto: R$ ${rendimentoBrutoCDB.toFixed(2)}<br>
             Imposto de Renda (IR) <span class="ir-icon ${irClass}"></span>(${aliquotaIR}%): R$ ${ir.toFixed(2)}<br>
-            Valor Líquido: R$ ${rendimentoLiquido.toFixed(2)}
+            Valor Líquido: R$ ${rendimentoLiquidoCDB.toFixed(2)}
         `;
     } else {
         document.getElementById("resultadoCDB-RDB").innerHTML = `<h3>CDB/RDB</h3> Não foi possível obter a taxa DI.`;
@@ -148,17 +175,13 @@ async function atualizarResultados() {
     // Atualiza o resultado do LCI/LCA
     const taxaLCX = await obterTaxaLCX();
     if (taxaLCX !== null) {
-        const rendimentoTotal = calcularRendimentoLCX(valorInvestido, taxaLCX, meses);
-        const rendimentoBruto = rendimentoTotal - valorInvestido;
-        const ioef = calcularIOF(valorInvestido, rendimentoTotal, dias);
-        const rendimentoLiquido = valorInvestido + rendimentoBruto - (ioef > 0 ? ioef : 0);
+        const rendimentoBrutoLCX = calcularRendimentoLCX(valorInvestido, taxaLCX, dias) - valorInvestido;
 
         document.getElementById("resultadoLCI-LCA").innerHTML = `
             <h3>LCI/LCA</h3>
             Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
-            ${ioef > 0 ? `IOF: R$ ${ioef.toFixed(2)}<br>` : ''}
-            Rendimento Bruto: R$ ${rendimentoBruto.toFixed(2)}<br>
-            Valor Líquido: R$ ${rendimentoLiquido.toFixed(2)}
+            Rendimento Bruto: R$ ${rendimentoBrutoLCX.toFixed(2)}<br>
+            Valor Líquido: R$ ${valorInvestido + rendimentoBrutoLCX.toFixed(2)}
         `;
     } else {
         document.getElementById("resultadoLCI-LCA").innerHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa DI.`;

@@ -21,6 +21,20 @@ header {
     padding: 10px; /* Padding ao redor da barra de navegação */
 }
 
+.title {
+    margin-bottom: 8px; /* Reduz a margem inferior do título */
+    font-size: 22px; /* Ajuste opcional do tamanho da fonte */
+    font-weight: bold; /* Ajuste opcional do peso da fonte */
+    color: #333; /* Ajuste opcional da cor do texto */
+}
+
+.subtitle {
+    margin-top: 0; /* Remove a margem superior do subtítulo */
+    margin-bottom: 10px; /* Ajusta a margem inferior do subtítulo se necessário */
+    font-size: 16px; /* Ajuste opcional do tamanho da fonte */
+    color: #555; /* Ajuste opcional da cor do texto */
+}
+
 .navbar {
     display: flex;
     align-items: center; /* Alinha os itens verticalmente */
@@ -50,35 +64,40 @@ header {
 
 .container {
     width: 100%;
-    max-width: 1200px; /* Aumenta o tamanho máximo dos containers */
+    max-width: 1250px; /* Aumenta o tamanho máximo dos containers */
     background: #fff;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
     border-radius: 10px; /* Bordas arredondadas */
     padding: 15px; /* Reduz o padding interno */
     box-sizing: border-box; /* Inclui padding e bordas na largura total */
-    margin-top: 40px; /* Diminui o espaçamento abaixo do cabeçalho fixo */
+    margin-top: 25px; /* Ajusta o espaçamento para o cabeçalho fixo */
     display: flex; /* Layout flexível */
     flex-direction: row; /* Alinhar os containers lado a lado */
-    gap: 15px; /* Reduz o espaçamento entre os containers */
+    gap: 10px; /* Reduz o espaçamento entre os containers */
 }
 
-.form-container, .results-container {
-    flex: 1; /* Usa espaço disponível de forma flexível */
+.form-container {
+    flex: 0.60; /* Usa espaço disponível de forma flexível */
     background: #fafafa; /* Cor de fundo suave */
     border-radius: 8px;
-    padding: 10px; /* Reduz o padding interno */
+    padding: 15px; /* Ajusta o padding interno */
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
     border: 1px solid #e0e0e0; /* Borda leve */
     box-sizing: border-box; /* Inclui padding e bordas na largura total */
     min-width: 0; /* Evita que os containers fiquem menores que o necessário */
-}
-
-.form-container {
-    margin-top: 0; /* Remove margem superior no container de formulário */
+    min-height: 350px; /* Define uma altura mínima para o container de formulário */
 }
 
 .results-container {
-    margin-top: 0; /* Remove margem superior no container de resultados */
+    flex: 1; /* Usa espaço disponível de forma flexível */
+    background: #fafafa; /* Cor de fundo suave */
+    border-radius: 8px;
+    padding: 15px; /* Ajusta o padding interno */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+    border: 1px solid #e0e0e0; /* Borda leve */
+    box-sizing: border-box; /* Inclui padding e bordas na largura total */
+    min-width: 0; /* Evita que os containers fiquem menores que o necessário */
+    min-height: 350px; /* Define uma altura mínima para o container de resultados */
 }
 
 .form-group {
@@ -138,36 +157,13 @@ input[type="number"] {
     justify-content: flex-end; /* Alinhamento dos botões à direita */
 }
 
-/* Estilos do botão de calcular */
-.btn-calcular {
-    background-color: #007bff; /* Cor de fundo azul */
-    color: #fff; /* Cor do texto branco */
-    border: none; /* Remove a borda padrão */
-    border-radius: 5px; /* Arredondamento dos cantos */
-    padding: 10px 18px; /* Ajusta o padding interno do botão */
-    font-size: 14px; /* Reduz o tamanho do texto */
-    font-weight: 600; /* Peso do texto em negrito */
-    cursor: pointer; /* Cursor de ponteiro ao passar sobre o botão */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Transição suave para efeitos de hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-}
-
-.btn-calcular:hover {
-    background-color: #0056b3; /* Cor de fundo mais escura ao passar o mouse */
-    transform: scale(1.02); /* Efeito de zoom ao passar o mouse */
-}
-
-.btn-calcular:focus {
-    outline: none; /* Remove o contorno padrão ao focar no botão */
-    box-shadow: 0 0 0 2px rgba(38, 143, 255, 0.5); /* Sombra de foco ao focar no botão */
-}
-
 #results {
-    margin-top: 10px; /* Espaçamento reduzido acima dos resultados */
+    margin-top: 8px; /* Espaçamento reduzido acima dos resultados */
 }
 
 .result-item {
-    margin-bottom: 8px; /* Reduz o espaçamento abaixo de cada resultado */
+    margin-top: 5px; /* Ajusta a margem superior para um espaçamento menor */
+    margin-bottom: 5px; /* Ajusta a margem inferior para um espaçamento menor */
     padding: 10px; /* Padding ajustado */
     border: 1px solid #e0e0e0; /* Borda leve */
     border-radius: 8px; /* Bordas arredondadas */
@@ -176,22 +172,41 @@ input[type="number"] {
     transition: box-shadow 0.2s ease; /* Transição suave */
 }
 
+.investment-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Ajusta o espaçamento entre as seções */
+}
+
+.investment-item {
+    background: #fafafa; /* Cor de fundo suave */
+    border: 1px solid #e0e0e0; /* Borda leve */
+    border-radius: 8px; /* Bordas arredondadas */
+    padding: 12px; /* Padding interno */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Sombra leve */
+    box-sizing: border-box; /* Inclui padding e bordas na largura total */
+}
+
 .result-item:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada ao passar o mouse */
 }
 
 .warning-message {
-    margin-top: 15px; /* Espaço acima da mensagem de aviso */
+    margin-top: 8px; /* Espaço acima da mensagem de aviso */
     padding: 10px; /* Padding ajustado para maior espaçamento interno */
     background-color: #fff3cd; /* Cor de fundo amarela clara */
     border: 1px solid #ffeeba; /* Borda amarela clara */
     border-radius: 8px; /* Bordas arredondadas */
     color: #856404; /* Cor do texto */
-    font-size: 14px; /* Tamanho do texto ajustado */
+    font-size: 12px; /* Tamanho da fonte ajustado */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Sombra leve */
+    display: flex; /* Alinhamento dos itens dentro da mensagem */
+    align-items: center; /* Alinha verticalmente os ícones e o texto */
+    gap: 5px; /* Espaço entre ícones e texto */
 }
 
 footer {
-    margin-top: 10px;
+    margin-top: 3px;
     text-align: center;
     font-size: 14px; /* Ajusta o tamanho da fonte do rodapé */
     color: #666;
