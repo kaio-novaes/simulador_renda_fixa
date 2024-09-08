@@ -54,6 +54,13 @@ function calcularAliquotaIR(dias) {
     return 15;
 }
 
+// Função para calcular o IOF
+function calcularIOF(valorInvestido, rendimentoBruto, dias) {
+    const aliquotaIOF = dias <= 30 ? 96 / 100 : 0; // IOF de 96% sobre o rendimento nos primeiros 30 dias
+    const rendimento = rendimentoBruto - valorInvestido;
+    return rendimento * aliquotaIOF;
+}
+
 // Função para obter a taxa DI para LCI/LCA (é a mesma que para CDB)
 async function obterTaxaLCX() {
     return await obterTaxaDI();
@@ -93,6 +100,7 @@ async function atualizarResultados() {
     }
 
     const meses = converterParaMeses(tempo, unidade);
+    const dias = tempo * (unidade === 'anos' ? 365 : (unidade === 'meses' ? 30 : 1));
 
     // Atualiza o resultado da poupança
     const taxaPoupanca = await obterTaxaPoupanca();
@@ -114,9 +122,10 @@ async function atualizarResultados() {
     if (taxaDI !== null) {
         const rendimentoTotal = calcularRendimentoCDB(valorInvestido, taxaDI, meses);
         const rendimentoBruto = rendimentoTotal - valorInvestido;
-        const aliquotaIR = calcularAliquotaIR(meses * 30.4166);
+        const aliquotaIR = calcularAliquotaIR(dias);
         const ir = rendimentoBruto * (aliquotaIR / 100);
-        const rendimentoLiquido = valorInvestido + rendimentoBruto - ir;
+        const ioef = calcularIOF(valorInvestido, rendimentoTotal, dias);
+        const rendimentoLiquido = valorInvestido + rendimentoBruto - ir - (ioef > 0 ? ioef : 0);
 
         let irClass = '';
         if (aliquotaIR <= 180) irClass = 'ir-22-5';
@@ -127,6 +136,7 @@ async function atualizarResultados() {
         document.getElementById("resultadoCDB-RDB").innerHTML = `
             <h3>CDB/RDB</h3>
             Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
+            ${ioef > 0 ? `IOF: R$ ${ioef.toFixed(2)}<br>` : ''}
             Rendimento Bruto: R$ ${rendimentoBruto.toFixed(2)}<br>
             Imposto de Renda (IR) <span class="ir-icon ${irClass}"></span>(${aliquotaIR}%): R$ ${ir.toFixed(2)}<br>
             Valor Líquido: R$ ${rendimentoLiquido.toFixed(2)}
@@ -138,12 +148,15 @@ async function atualizarResultados() {
     // Atualiza o resultado do LCI/LCA
     const taxaLCX = await obterTaxaLCX();
     if (taxaLCX !== null) {
-        const rendimentoLiquido = calcularRendimentoLCX(valorInvestido, taxaLCX, meses);
-        const rendimentoBruto = rendimentoLiquido - valorInvestido;
+        const rendimentoTotal = calcularRendimentoLCX(valorInvestido, taxaLCX, meses);
+        const rendimentoBruto = rendimentoTotal - valorInvestido;
+        const ioef = calcularIOF(valorInvestido, rendimentoTotal, dias);
+        const rendimentoLiquido = valorInvestido + rendimentoBruto - (ioef > 0 ? ioef : 0);
 
         document.getElementById("resultadoLCI-LCA").innerHTML = `
             <h3>LCI/LCA</h3>
             Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
+            ${ioef > 0 ? `IOF: R$ ${ioef.toFixed(2)}<br>` : ''}
             Rendimento Bruto: R$ ${rendimentoBruto.toFixed(2)}<br>
             Valor Líquido: R$ ${rendimentoLiquido.toFixed(2)}
         `;
