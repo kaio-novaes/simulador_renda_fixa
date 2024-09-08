@@ -145,40 +145,36 @@ async function atualizarResultados() {
     // Atualiza o resultado do CDB/RDB
     const taxaDI = await obterTaxaDI();
     if (taxaDI !== null) {
-        const percentualDI_CDB = parseFloat(document.getElementById("percentualDI_CDB").value);
-        if (!isNaN(percentualDI_CDB)) {
-            const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI * percentualDI_CDB / 100, dias);
-            const ioef = calcularIOF(valorInvestido, rendimentoBrutoCDB, dias);
-            const rendimentoBrutoComIOF = rendimentoBrutoCDB - ioef;
-            const aliquotaIR = calcularAliquotaIR(dias);
-            const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
-            const rendimentoLiquidoCDB = valorInvestido + rendimentoBrutoComIOF - ir;
+        const percentualDI_CDB = parseFloat(document.getElementById("percentualDI_CDB").value) || 100; // Define padrão de 100% se não fornecido
+        const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI * percentualDI_CDB / 100, dias);
+        const ioef = calcularIOF(valorInvestido, rendimentoBrutoCDB, dias);
+        const rendimentoBrutoComIOF = rendimentoBrutoCDB - ioef;
+        const aliquotaIR = calcularAliquotaIR(dias);
+        const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
+        const rendimentoLiquidoCDB = valorInvestido + rendimentoBrutoComIOF - ir;
 
-            let irClass = '';
-            if (aliquotaIR <= 180) irClass = 'ir-22-5';
-            else if (aliquotaIR <= 360) irClass = 'ir-20';
-            else if (aliquotaIR <= 720) irClass = 'ir-17-5';
-            else irClass = 'ir-15';
+        let irClass = '';
+        if (aliquotaIR <= 180) irClass = 'ir-22-5';
+        else if (aliquotaIR <= 360) irClass = 'ir-20';
+        else if (aliquotaIR <= 720) irClass = 'ir-17-5';
+        else irClass = 'ir-15';
 
-            document.getElementById("resultadoCDB-RDB").innerHTML = `
-                <h3>CDB/RDB</h3>
-                Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
-                ${ioef > 0 ? `IOF: R$ ${ioef.toFixed(2)}<br>` : ''}
-                Rendimento Bruto: R$ ${rendimentoBrutoCDB.toFixed(2)}<br>
-                Imposto de Renda (IR) <span class="ir-icon ${irClass}"></span>(${aliquotaIR}%): R$ ${ir.toFixed(2)}<br>
-                Valor Líquido: R$ ${rendimentoLiquidoCDB.toFixed(2)}
-            `;
-        } else {
-            document.getElementById("resultadoCDB-RDB").innerHTML = `<h3>CDB/RDB</h3> Valor percentual CDB/RDB inválido.`;
-        }
+        document.getElementById("resultadoCDB-RDB").innerHTML = `
+            <h3>CDB/RDB</h3>
+            Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
+            ${ioef > 0 ? `IOF: R$ ${ioef.toFixed(2)}<br>` : ''}
+            Rendimento Bruto: R$ ${rendimentoBrutoCDB.toFixed(2)}<br>
+            Imposto de Renda (IR) <span class="ir-icon ${irClass}"></span>(${aliquotaIR}%): R$ ${ir.toFixed(2)}<br>
+            Valor Líquido: R$ ${rendimentoLiquidoCDB.toFixed(2)}
+        `;
     } else {
         document.getElementById("resultadoCDB-RDB").innerHTML = `<h3>CDB/RDB</h3> Não foi possível obter a taxa DI.`;
     }
 
     // Atualiza o resultado do LCI/LCA
-    const percentualDI_LCX = parseFloat(document.getElementById("percentualDI_LCX").value);
+    const percentualDI_LCX = parseFloat(document.getElementById("percentualDI_LCX").value) || 100; // Define padrão de 100% se não fornecido
     const taxaLCX = await obterTaxaLCX();
-    if (taxaLCX !== null && !isNaN(percentualDI_LCX)) {
+    if (taxaLCX !== null) {
         const rendimentoBrutoLCX = calcularRendimentoLCX(valorInvestido, taxaLCX * percentualDI_LCX / 100, dias);
         const rendimentoLiquidoLCX = valorInvestido + rendimentoBrutoLCX;
 
@@ -189,7 +185,7 @@ async function atualizarResultados() {
             Valor Líquido: R$ ${rendimentoLiquidoLCX.toFixed(2)}
         `;
     } else {
-        document.getElementById("resultadoLCI-LCA").innerHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa DI ou valor percentual LCI/LCA inválido.`;
+        document.getElementById("resultadoLCI-LCA").innerHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa DI.`;
     }
 }
 
