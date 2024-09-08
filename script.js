@@ -26,22 +26,21 @@ async function obterTaxaPoupanca() {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
         const data = await response.json();
-        return parseFloat(data[0].valor);
+        return parseFloat(data[0].valor) / 100; // Converter para taxa decimal mensal
     } catch (error) {
-        console.error("Erro ao fazer requisição:", error);
+        console.error("Erro ao fazer requisição de taxa de poupança:", error);
         return null;
     }
 }
 
 // Função para calcular rendimento da poupança
-function calcularRendimentoPoupanca(valorInvestido, taxaAnual, dias) {
-    const taxaDiaria = (1 + taxaAnual / 100) ** (1 / 365) - 1;
-    const periodos = dias;
+function calcularRendimentoPoupanca(valorInvestido, taxaMensal, dias) {
+    const taxaDiaria = (1 + taxaMensal) ** (1 / 30.41) - 1; // Converter taxa mensal para taxa diária
     let rendimentoBruto = valorInvestido;
-    for (let i = 0; i < periodos; i++) {
-        rendimentoBruto += rendimentoBruto * taxaDiaria;
+    for (let i = 0; i < dias; i++) {
+        rendimentoBruto *= (1 + taxaDiaria);
     }
-    return rendimentoBruto;
+    return rendimentoBruto - valorInvestido; // Retorna apenas o rendimento bruto
 }
 
 // Função para obter a taxa DI
@@ -53,7 +52,7 @@ async function obterTaxaDI() {
         const data = await response.json();
         return parseFloat(data[0].valor);
     } catch (error) {
-        console.error("Erro ao fazer requisição:", error);
+        console.error("Erro ao fazer requisição de taxa DI:", error);
         return null;
     }
 }
@@ -65,7 +64,7 @@ function calcularRendimentoCDB(valorInvestido, taxaDI, dias) {
     for (let i = 0; i < dias; i++) {
         valorFinal *= (1 + taxaDiaria);
     }
-    return valorFinal;
+    return valorFinal - valorInvestido;
 }
 
 // Função para calcular a alíquota de IR com base no número de dias
@@ -83,8 +82,7 @@ const iofTable = [96, 93, 90, 86, 83, 80, 76, 73, 70, 66, 63, 60, 56, 53, 50, 46
 function calcularIOF(valorInvestido, rendimentoBruto, dias) {
     const index = Math.min(dias - 1, 29); // O índice vai de 0 a 29 para 30 dias
     const aliquotaIOF = iofTable[index] / 100; // Convertendo para uma taxa decimal
-    const rendimento = rendimentoBruto - valorInvestido;
-    return rendimento * aliquotaIOF;
+    return rendimentoBruto * aliquotaIOF;
 }
 
 // Função para obter a taxa DI para LCI/LCA (é a mesma que para CDB)
@@ -99,7 +97,7 @@ function calcularRendimentoLCX(valorInvestido, taxaDI, dias) {
     for (let i = 0; i < dias; i++) {
         valorFinal *= (1 + taxaDiaria);
     }
-    return valorFinal;
+    return valorFinal - valorInvestido; // Retorna apenas o rendimento bruto
 }
 
 // Função para converter unidades de tempo para dias
@@ -131,7 +129,7 @@ async function atualizarResultados() {
     // Atualiza o resultado da poupança
     const taxaPoupanca = await obterTaxaPoupanca();
     if (taxaPoupanca !== null) {
-        const rendimentoBrutoPoupanca = calcularRendimentoPoupanca(valorInvestido, taxaPoupanca, dias) - valorInvestido;
+        const rendimentoBrutoPoupanca = calcularRendimentoPoupanca(valorInvestido, taxaPoupanca, dias);
         const rendimentoLiquidoPoupanca = valorInvestido + rendimentoBrutoPoupanca;
 
         document.getElementById("resultadoPoupanca").innerHTML = `
@@ -147,48 +145,54 @@ async function atualizarResultados() {
     // Atualiza o resultado do CDB/RDB
     const taxaDI = await obterTaxaDI();
     if (taxaDI !== null) {
-        const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI, dias) - valorInvestido;
-        const ioef = calcularIOF(valorInvestido, rendimentoBrutoCDB + valorInvestido, dias);
-        const rendimentoBrutoComIOF = rendimentoBrutoCDB - ioef;
-        const aliquotaIR = calcularAliquotaIR(dias);
-        const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
-        const rendimentoLiquidoCDB = valorInvestido + rendimentoBrutoComIOF - ir;
+        const percentualDI_CDB = parseFloat(document.getElementById("percentualDI_CDB").value);
+        if (!isNaN(percentualDI_CDB)) {
+            const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI * percentualDI_CDB / 100, dias);
+            const ioef = calcularIOF(valorInvestido, rendimentoBrutoCDB, dias);
+            const rendimentoBrutoComIOF = rendimentoBrutoCDB - ioef;
+            const aliquotaIR = calcularAliquotaIR(dias);
+            const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
+            const rendimentoLiquidoCDB = valorInvestido + rendimentoBrutoComIOF - ir;
 
-        let irClass = '';
-        if (aliquotaIR <= 180) irClass = 'ir-22-5';
-        else if (aliquotaIR <= 360) irClass = 'ir-20';
-        else if (aliquotaIR <= 720) irClass = 'ir-17-5';
-        else irClass = 'ir-15';
+            let irClass = '';
+            if (aliquotaIR <= 180) irClass = 'ir-22-5';
+            else if (aliquotaIR <= 360) irClass = 'ir-20';
+            else if (aliquotaIR <= 720) irClass = 'ir-17-5';
+            else irClass = 'ir-15';
 
-        document.getElementById("resultadoCDB-RDB").innerHTML = `
-            <h3>CDB/RDB</h3>
-            Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
-            ${ioef > 0 ? `IOF: R$ ${ioef.toFixed(2)}<br>` : ''}
-            Rendimento Bruto: R$ ${rendimentoBrutoCDB.toFixed(2)}<br>
-            Imposto de Renda (IR) <span class="ir-icon ${irClass}"></span>(${aliquotaIR}%): R$ ${ir.toFixed(2)}<br>
-            Valor Líquido: R$ ${rendimentoLiquidoCDB.toFixed(2)}
-        `;
+            document.getElementById("resultadoCDB-RDB").innerHTML = `
+                <h3>CDB/RDB</h3>
+                Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
+                ${ioef > 0 ? `IOF: R$ ${ioef.toFixed(2)}<br>` : ''}
+                Rendimento Bruto: R$ ${rendimentoBrutoCDB.toFixed(2)}<br>
+                Imposto de Renda (IR) <span class="ir-icon ${irClass}"></span>(${aliquotaIR}%): R$ ${ir.toFixed(2)}<br>
+                Valor Líquido: R$ ${rendimentoLiquidoCDB.toFixed(2)}
+            `;
+        } else {
+            document.getElementById("resultadoCDB-RDB").innerHTML = `<h3>CDB/RDB</h3> Valor percentual CDB/RDB inválido.`;
+        }
     } else {
         document.getElementById("resultadoCDB-RDB").innerHTML = `<h3>CDB/RDB</h3> Não foi possível obter a taxa DI.`;
     }
 
     // Atualiza o resultado do LCI/LCA
+    const percentualDI_LCX = parseFloat(document.getElementById("percentualDI_LCX").value);
     const taxaLCX = await obterTaxaLCX();
-    if (taxaLCX !== null) {
-        const rendimentoBrutoLCX = calcularRendimentoLCX(valorInvestido, taxaLCX, dias) - valorInvestido;
+    if (taxaLCX !== null && !isNaN(percentualDI_LCX)) {
+        const rendimentoBrutoLCX = calcularRendimentoLCX(valorInvestido, taxaLCX * percentualDI_LCX / 100, dias);
+        const rendimentoLiquidoLCX = valorInvestido + rendimentoBrutoLCX;
 
         document.getElementById("resultadoLCI-LCA").innerHTML = `
             <h3>LCI/LCA</h3>
             Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
             Rendimento Bruto: R$ ${rendimentoBrutoLCX.toFixed(2)}<br>
-            Valor Líquido: R$ ${valorInvestido + rendimentoBrutoLCX.toFixed(2)}
+            Valor Líquido: R$ ${rendimentoLiquidoLCX.toFixed(2)}
         `;
     } else {
-        document.getElementById("resultadoLCI-LCA").innerHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa DI.`;
+        document.getElementById("resultadoLCI-LCA").innerHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa DI ou valor percentual LCI/LCA inválido.`;
     }
 }
 
-// Adiciona ouvintes de eventos para atualizar os resultados automaticamente
-document.getElementById("valorInvestido").addEventListener("input", atualizarResultados);
-document.getElementById("tempo").addEventListener("input", atualizarResultados);
-document.getElementById("unidadeTempo").addEventListener("change", atualizarResultados);
+// Adiciona evento de mudança ao formulário
+const inputs = document.querySelectorAll("#valorInvestido, #tempo, #unidadeTempo, #percentualDI_CDB, #percentualDI_LCX");
+inputs.forEach(input => input.addEventListener("input", atualizarResultados));
