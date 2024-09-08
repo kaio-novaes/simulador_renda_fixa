@@ -20,7 +20,7 @@
             <h1>Investimentos</h1>
             <div class="form-group">
                 <label for="valorInvestido">Valor da Aplicação</label>
-                <input type="number" id="valorInvestido" class="input-group__input" value="1000" placeholder="Valor em R$" min="0" required>
+                <input type="text" id="valorInvestido" class="input-group__input currency" placeholder="R$ 0,00" required>
             </div>
 
             <div class="form-group">
@@ -36,18 +36,18 @@
             </div>
 
             <div class="form-group">
-                <label for="taxaDI">Taxa DI</label>
-                <input type="number" id="taxaDI" class="input-group__input" placeholder="% ao ano" step="0.01" min="0" required>
+                <label for="taxaDI">Taxa DI:</label>
+                <input type="text" id="taxaDI" name="taxaDI" placeholder="Insira a taxa DI (% ao ano)" />
             </div>
 
             <div class="form-group">
                 <label for="percentualDI_CDB">CDB/RDB</label>
-                <input type="number" id="percentualDI_CDB" class="input-group__input" placeholder="% DI" step="0.01" min="0" required>
+                <input type="text" id="percentualDI_CDB" class="input-group__input currency" placeholder="100% DI" step="0.01" min="0">
             </div>
 
             <div class="form-group">
                 <label for="percentualDI_LCX">LCI/LCA</label>
-                <input type="number" id="percentualDI_LCX" class="input-group__input" placeholder="% DI" step="0.01" min="0" required>
+                <input type="text" id="percentualDI_LCX" class="input-group__input currency" placeholder="100% DI" step="0.01" min="0">
             </div>
         </div>
 

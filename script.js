@@ -1,23 +1,48 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Função para formatar a data como 'DD/MM'
-    function formatarData(data) {
-        const dia = String(data.getDate()).padStart(2, '0');
-        const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses são baseados em 0
-        return `${dia}/${mes}`;
-    }
+// Função para formatar valores monetários
+const formatarMoeda = (valor) => {
+    if (isNaN(valor)) return 'R$ 0,00';
+    return `R$ ${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+};
 
-    // Função para atualizar o elemento com a data atual
-    function atualizarDataAtual() {
-        const elementoData = document.getElementById('dataAtual');
-        const dataAtual = new Date();
-        const dataFormatada = formatarData(dataAtual);
-        elementoData.setAttribute('data-value', dataFormatada);
-        elementoData.textContent = dataFormatada;
-    }
+// Função para formatar entrada monetária para exibição
+const aplicarMascaraMoeda = (valor) => {
+    const valorNumerico = parseFloat(valor.replace(/\D/g, '')) / 100;
+    return formatarMoeda(valorNumerico);
+};
 
-    // Chama a função ao carregar a página
-    atualizarDataAtual();
-});
+// Função para atualizar o valor do campo com a máscara aplicada
+const atualizarCampoComMascara = (event) => {
+    const campo = event.target;
+    const valorOriginal = campo.value.replace(/\D/g, '');
+    campo.value = aplicarMascaraMoeda(valorOriginal);
+};
+
+// Adiciona máscara ao campo de valor da aplicação
+document.getElementById('valorInvestido').addEventListener('input', atualizarCampoComMascara);
+
+// Função para extrair valor numérico de um campo com máscara
+const extrairValorNumerico = (valor) => {
+    return parseFloat(valor.replace('R$ ', '').replace('.', '').replace(',', '.'));
+};
+
+// Função para formatar a data como 'DD/MM'
+function formatarData(data) {
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses são baseados em 0
+    return `${dia}/${mes}`;
+}
+
+// Função para atualizar o elemento com a data atual
+function atualizarDataAtual() {
+    const elementoData = document.getElementById('dataAtual');
+    const dataAtual = new Date();
+    const dataFormatada = formatarData(dataAtual);
+    elementoData.setAttribute('data-value', dataFormatada);
+    elementoData.textContent = dataFormatada;
+}
+
+// Chama a função ao carregar a página
+document.addEventListener('DOMContentLoaded', atualizarDataAtual);
 
 // Função para obter a taxa de poupança
 async function obterTaxaPoupanca() {
@@ -116,7 +141,7 @@ function converterParaDias(tempo, unidade) {
 
 // Função para atualizar os resultados
 async function atualizarResultados() {
-    const valorInvestido = parseFloat(document.getElementById("valorInvestido").value);
+    const valorInvestido = extrairValorNumerico(document.getElementById("valorInvestido").value);
     const tempo = parseInt(document.getElementById("tempo").value);
     const unidade = document.getElementById("unidadeTempo").value;
 
@@ -134,13 +159,13 @@ async function atualizarResultados() {
 
         document.getElementById("resultadoPoupanca").innerHTML = `
             <h3>Poupança</h3>
-            Valor da Aplicação: R$ ${valorInvestido.toFixed(2)}<br>
-            Rendimento Bruto: R$ ${rendimentoBrutoPoupanca.toFixed(2)}<br>
-            Valor Líquido: R$ ${rendimentoLiquidoPoupanca.toFixed(2)}
+            Valor da Aplicação: ${formatarMoeda(valorInvestido)}<br>
+            Rendimento Bruto: ${formatarMoeda(rendimentoBrutoPoupanca)}<br>
+            Valor Líquido: ${formatarMoeda(rendimentoLiquidoPoupanca)}
         `;
     } else {
         document.getElementById("resultadoPoupanca").innerHTML = `<h3>Poupança</h3> Não foi possível obter a taxa de poupança.`;
-    }
+    }   
 
     // Atualiza o resultado do CDB/RDB
     const taxaDI = await obterTaxaDI();
