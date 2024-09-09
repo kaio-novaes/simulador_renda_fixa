@@ -5,25 +5,40 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column; /* Alinhar conteúdo em coluna */
-    min-height: 100vh; /* Garantir altura mínima de tela */
-    align-items: center; /* Alinhamento horizontal ao centro */
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
 }
 
 header {
-    width: 100%; /* Largura total do cabeçalho */
-    position: fixed; /* Fixa o cabeçalho no topo */
+    width: 100%;
+    position: fixed;
     top: 0;
     right: 0;
-    z-index: 1000; /* Garante que o cabeçalho esteja acima de outros elementos */
+    z-index: 1000;
     display: flex;
-    justify-content: flex-end; /* Alinha o conteúdo ao final do cabeçalho */
-    padding: 10px; /* Padding ao redor da barra de navegação */
+    justify-content: flex-end;
+    padding: 10px;
+    background: #fff; /* Fundo branco para melhor visibilidade */
+}
+
+.title {
+    margin-bottom: 8px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+}
+
+.subtitle {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #555;
 }
 
 .navbar {
     display: flex;
-    align-items: center; /* Alinha os itens verticalmente */
+    align-items: center;
 }
 
 .nav-links {
@@ -34,107 +49,256 @@ header {
 }
 
 .nav-links li {
-    margin: 0; /* Remove margens laterais */
+    margin: 0;
 }
 
 .nav-links a {
-    color: #333; /* Cor do ícone */
+    color: #333;
     text-decoration: none;
-    font-size: 25px; /* Reduzido para 20px */
-    transition: color 0.3s ease; /* Transição de cor */
+    font-size: 25px;
+    transition: color 0.3s ease;
 }
 
 .nav-links a:hover {
-    color: #007bff; /* Cor ao passar o mouse */
+    color: #007bff;
 }
 
 /* Ajuste do container principal */
-main.container {
+.container {
     width: 100%;
-    max-width: 900px; /* Manter o tamanho máximo do container */
+    max-width: 1250px;
     background: #fff;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
-    border-radius: 10px; /* Bordas arredondadas */
-    padding: 20px;
-    box-sizing: border-box; /* Inclui padding e bordas na largura total */
-    margin-top: 60px; /* Espaçamento aumentado abaixo do cabeçalho fixo */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    box-sizing: border-box;
+    margin-top: 25px;
     display: flex;
-    flex-direction: column; /* Coluna para conteúdo */
-    gap: 12px; /* Espaçamento entre containers */
+    flex-direction: row;
+    gap: 10px;
 }
 
-h1 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 10px; /* Margem reduzida embaixo do título */
-    font-size: 26px; /* Fonte ajustada */
-    font-weight: 600; /* Peso de fonte moderado */
+.form-container {
+    flex: 0.60;
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 350px;
 }
 
-.central-image {
+.results-container {
+    flex: 1;
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 350px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+label {
     display: block;
-    margin: 20px auto; /* Centraliza a imagem horizontalmente e adiciona margem acima e abaixo */
-    max-width: 20%; 
-    height: auto; /* Mantém a proporção da imagem */
+    margin-bottom: 4px;
+    font-weight: 550;
+    color: #444;
 }
 
-p {
-    margin-bottom: 3px; /* Reduzido o espaço entre parágrafos */
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
 }
 
-.social-links-container {
-    text-align: center; /* Centraliza o texto dentro do contêiner */
-    margin-top: 30px; /* Espaço acima dos links de redes sociais */
-}
-
-.social-links-container h2 {
-    font-size: 24px; /* Reduzido para 24px */
-    color: #333; /* Cor do título */
-    margin-bottom: 20px; /* Espaço abaixo do título */
-}
-
-.social-links {
+.period-group {
     display: flex;
-    justify-content: center; /* Centraliza os ícones horizontalmente */
-    gap: 20px; /* Espaçamento ajustado entre os ícones */
+    align-items: center;
+    gap: 10px;
 }
 
-.social-links a {
-    text-decoration: none; /* Remove sublinhado dos links */
-    display: flex; /* Usa flexbox para centralizar o texto ao lado dos ícones */
-    align-items: center; /* Alinha verticalmente o texto com os ícones */
-    gap: 5px; /* Espaçamento entre o ícone e o texto */
-    padding: 8px; /* Padding ao redor dos ícones */
-    font-size: 20px; /* Tamanho dos ícones */
-    border-radius: 5px; /* Bordas arredondadas para os ícones */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave para cor de fundo e texto */
+.period-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
 }
 
-.social-links a.linkedin {
-    color: #fff; /* Cor do texto dos links */
-    background-color: #0077b5; /* Cor de fundo para LinkedIn */
+.period-select {
+    flex-shrink: 0;
+    width: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #fafafa;
+    appearance: none;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.social-links a.github {
-    color: #fff; /* Cor do texto dos links */
-    background-color: #181717; /* Cor de fundo para GitHub */
+.period-select::-ms-expand {
+    display: none;
 }
 
-.social-links a:hover {
-    opacity: 0.8; /* Reduz a opacidade ao passar o mouse para um efeito visual */
+.button-group {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
 }
 
-.social-links i {
-    font-size: 18px; /* Tamanho dos ícones */
+#results {
+    margin-top: 8px;
 }
 
-.social-links span {
-    font-size: 14px; /* Tamanho do texto ao lado dos ícones */
+.result-item {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease;
+}
+
+.result-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.warning-message {
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    color: #856404;
+    font-size: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 footer {
-    margin-top: 5px;
+    margin-top: 3px;
+    padding: 10px;
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
     color: #666;
+}
+
+/* Consultas de Mídia para Responsividade */
+
+/* Telas menores que 768px */
+@media (max-width: 768px) {
+    .title {
+        font-size: 18px; /* Ajuste para tamanhos menores */
+    }
+
+    .subtitle {
+        font-size: 14px; /* Ajuste para tamanhos menores */
+    }
+
+    .navbar {
+        flex-direction: column; /* Empilha itens verticalmente */
+        align-items: flex-start; /* Alinha à esquerda */
+    }
+
+    .nav-links {
+        flex-direction: column; /* Empilha links verticalmente */
+    }
+
+    .nav-links a {
+        font-size: 20px; /* Ajuste para tamanhos menores */
+    }
+
+    .container {
+        flex-direction: column; /* Empilha containers verticalmente */
+        gap: 15px; /* Aumenta o espaço entre containers */
+    }
+
+    .form-container,
+    .results-container {
+        min-height: auto; /* Remove altura mínima */
+        width: 100%; /* Ajusta para largura total */
+        margin: 0; /* Remove margem */
+        margin-bottom: 15px; /* Adiciona margem inferior para separação */
+    }
+
+    .button-group {
+        flex-direction: column; /* Empilha botões verticalmente */
+        align-items: flex-end; /* Alinha à direita */
+    }
+}
+
+/* Telas menores que 480px */
+@media (max-width: 480px) {
+    .title {
+        font-size: 16px; /* Ajuste para tamanhos menores */
+    }
+
+    .subtitle {
+        font-size: 12px; /* Ajuste para tamanhos menores */
+    }
+
+    .navbar {
+        padding: 8px; /* Reduz padding */
+    }
+
+    .nav-links a {
+        font-size: 18px; /* Ajuste para tamanhos menores */
+    }
+
+    .form-container,
+    .results-container {
+        padding: 10px; /* Reduz padding */
+    }
+
+    input[type="text"],
+    input[type="number"] {
+        font-size: 12px; /* Reduz tamanho da fonte */
+    }
+
+    .period-input,
+    .period-select {
+        font-size: 12px; /* Reduz tamanho da fonte */
+    }
+
+    .result-item {
+        font-size: 12px; /* Reduz tamanho da fonte */
+        padding: 8px; /* Reduz padding */
+    }
+
+    .warning-message {
+        font-size: 10px; /* Ajuste para tamanhos menores */
+    }
+
+    footer {
+        font-size: 12px; /* Reduz tamanho da fonte */
+    }
+}
+
+/* Telas maiores que 768px */
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row; /* Mantém a disposição em linha */
+    }
+
+    .form-container {
+        flex: 0.60; /* Mantém a proporção */
+    }
+
+    .results-container {
+        flex: 1; /* Mantém a proporção */
+    }
 }
