@@ -1,10 +1,17 @@
+// Função para formatar a taxa DI para exibição
+const formatarTaxaDI = (taxaDI) => {
+    if (isNaN(taxaDI)) return 'Não disponível';
+    // Aqui assumimos que a taxa DI vem como uma porcentagem, mas sem o sinal de %
+    return `${taxaDI.toFixed(2).replace('.', ',')}%`;
+};
+
 // Função para atualizar o valor da Taxa DI no campo de entrada
 async function atualizarTaxaDI() {
     const taxaDI = await obterTaxaDI();
     const campoTaxaDI = document.getElementById("taxaDI");
 
     if (taxaDI !== null) {
-        campoTaxaDI.value = `${taxaDI.toFixed(2)}%`;
+        campoTaxaDI.value = formatarTaxaDI(taxaDI);
     } else {
         campoTaxaDI.value = "Não disponível";
     }
@@ -83,25 +90,6 @@ function calcularRendimentoPoupanca(valorInvestido, taxaMensal, dias) {
     return rendimentoBruto - valorInvestido; // Retorna apenas o rendimento bruto
 }
 
-// Função para formatar a taxa DI para exibição
-const formatarTaxaDI = (taxaDI) => {
-    if (isNaN(taxaDI)) return 'Não disponível';
-    // Aqui assumimos que a taxa DI vem como uma porcentagem, mas sem o sinal de %
-    return `${taxaDI.toFixed(2).replace('.', ',')}`;
-};
-
-// Função para atualizar o valor da Taxa DI no campo de entrada
-async function atualizarTaxaDI() {
-    const taxaDI = await obterTaxaDI();
-    const campoTaxaDI = document.getElementById("taxaDI");
-
-    if (taxaDI !== null) {
-        campoTaxaDI.value = formatarTaxaDI(taxaDI);
-    } else {
-        campoTaxaDI.value = "Não disponível";
-    }
-}
-
 // Função para obter a taxa DI
 async function obterTaxaDI() {
     const url = 'https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados/ultimos/1?formato=json';
@@ -109,7 +97,7 @@ async function obterTaxaDI() {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
         const data = await response.json();
-        return parseFloat(data[0].valor);
+        return parseFloat(data[0].valor); // Retorna como percentual anual
     } catch (error) {
         console.error("Erro ao fazer requisição de taxa DI:", error);
         return null;
@@ -178,12 +166,24 @@ async function atualizarResultados() {
     const valorInvestido = extrairValorNumerico(document.getElementById("valorInvestido").value);
     const tempo = parseInt(document.getElementById("tempo").value);
     const unidade = document.getElementById("unidadeTempo").value;
+    const taxaDIUsuario = document.getElementById("taxaDI").value.replace(',', '.'); // Valor inserido pelo usuário
 
     if (isNaN(valorInvestido) || valorInvestido <= 0 || isNaN(tempo) || tempo <= 0) {
         return;
     }
 
     const dias = converterParaDias(tempo, unidade);
+    let taxaDI;
+
+    // Verifica se o usuário forneceu uma taxa DI
+    if (taxaDIUsuario) {
+        taxaDI = parseFloat(taxaDIUsuario);
+        if (isNaN(taxaDI)) {
+            taxaDI = await obterTaxaDI(); // Usa a taxa padrão se o valor inserido não for válido
+        }
+    } else {
+        taxaDI = await obterTaxaDI(); // Usa a taxa padrão se o campo estiver vazio
+    }
 
     // Atualiza o resultado da poupança
     const taxaPoupanca = await obterTaxaPoupanca();
@@ -202,7 +202,6 @@ async function atualizarResultados() {
     }   
 
     // Atualiza o resultado do CDB/RDB
-    const taxaDI = await obterTaxaDI();
     if (taxaDI !== null) {
         const percentualDI_CDB = parseFloat(document.getElementById("percentualDI_CDB").value) || 100; // Define padrão de 100% se não fornecido
         const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI * percentualDI_CDB / 100, dias);
@@ -232,9 +231,8 @@ async function atualizarResultados() {
 
     // Atualiza o resultado do LCI/LCA
     const percentualDI_LCX = parseFloat(document.getElementById("percentualDI_LCX").value) || 100; // Define padrão de 100% se não fornecido
-    const taxaLCX = await obterTaxaLCX();
-    if (taxaLCX !== null) {
-        const rendimentoBrutoLCX = calcularRendimentoLCX(valorInvestido, taxaLCX * percentualDI_LCX / 100, dias);
+    if (taxaDI !== null) {
+        const rendimentoBrutoLCX = calcularRendimentoLCX(valorInvestido, taxaDI * percentualDI_LCX / 100, dias);
         const rendimentoLiquidoLCX = valorInvestido + rendimentoBrutoLCX;
 
         document.getElementById("resultadoLCI-LCA").innerHTML = `
@@ -249,5 +247,5 @@ async function atualizarResultados() {
 }
 
 // Adiciona evento de mudança ao formulário
-const inputs = document.querySelectorAll("#valorInvestido, #tempo, #unidadeTempo, #percentualDI_CDB, #percentualDI_LCX");
+const inputs = document.querySelectorAll("#valorInvestido, #tempo, #unidadeTempo, #percentualDI_CDB, #percentualDI_LCX, #taxaDI");
 inputs.forEach(input => input.addEventListener("input", atualizarResultados));
