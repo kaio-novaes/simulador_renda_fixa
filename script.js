@@ -1,3 +1,15 @@
+// Função para atualizar o valor da Taxa DI no campo de entrada
+async function atualizarTaxaDI() {
+    const taxaDI = await obterTaxaDI();
+    const campoTaxaDI = document.getElementById("taxaDI");
+
+    if (taxaDI !== null) {
+        campoTaxaDI.value = `${taxaDI.toFixed(2)}%`;
+    } else {
+        campoTaxaDI.value = "Não disponível";
+    }
+}
+
 // Função para formatar valores monetários
 const formatarMoeda = (valor) => {
     if (isNaN(valor)) return 'R$ 0,00';
@@ -42,7 +54,10 @@ function atualizarDataAtual() {
 }
 
 // Chama a função ao carregar a página
-document.addEventListener('DOMContentLoaded', atualizarDataAtual);
+document.addEventListener('DOMContentLoaded', () => {
+    atualizarDataAtual();
+    atualizarTaxaDI(); // Atualiza a Taxa DI ao carregar a página
+});
 
 // Função para obter a taxa de poupança
 async function obterTaxaPoupanca() {
@@ -66,6 +81,25 @@ function calcularRendimentoPoupanca(valorInvestido, taxaMensal, dias) {
         rendimentoBruto *= (1 + taxaDiaria);
     }
     return rendimentoBruto - valorInvestido; // Retorna apenas o rendimento bruto
+}
+
+// Função para formatar a taxa DI para exibição
+const formatarTaxaDI = (taxaDI) => {
+    if (isNaN(taxaDI)) return 'Não disponível';
+    // Aqui assumimos que a taxa DI vem como uma porcentagem, mas sem o sinal de %
+    return `${taxaDI.toFixed(2).replace('.', ',')}`;
+};
+
+// Função para atualizar o valor da Taxa DI no campo de entrada
+async function atualizarTaxaDI() {
+    const taxaDI = await obterTaxaDI();
+    const campoTaxaDI = document.getElementById("taxaDI");
+
+    if (taxaDI !== null) {
+        campoTaxaDI.value = formatarTaxaDI(taxaDI);
+    } else {
+        campoTaxaDI.value = "Não disponível";
+    }
 }
 
 // Função para obter a taxa DI
