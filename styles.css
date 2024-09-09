@@ -72,7 +72,7 @@ header {
     border-radius: 10px;
     padding: 15px;
     box-sizing: border-box;
-    margin-top: 25px;
+    margin-top: 40px; /* Ajustado para evitar sobreposição com header */
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -135,6 +135,7 @@ input[type="number"] {
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 14px;
+    min-width: 150px; /* Define uma largura mínima para o campo */
 }
 
 .period-select {
@@ -243,6 +244,10 @@ footer {
 
 /* Telas menores que 480px */
 @media (max-width: 480px) {
+    .period-input {
+        min-width: 100px; /* Ajuste a largura mínima em telas muito pequenas */
+    }
+
     .title {
         font-size: 16px; /* Ajuste para tamanhos menores */
     }

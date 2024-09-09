@@ -15,43 +15,45 @@
             </ul>
         </nav>
     </header>
-    <div class="container">
-        <div class="form-container">
+    <main class="container">
+        <section class="form-container">
             <h1>Investimentos</h1>
-            <div class="form-group">
-                <label for="valorInvestido">Valor da Aplicação</label>
-                <input type="text" id="valorInvestido" class="input-group__input currency" placeholder="R$ 0,00" required>
-            </div>
-
-            <div class="form-group">
-                <label for="tempo">Vencimento</label>
-                <div class="period-group">
-                    <input type="number" id="tempo" class="period-input" value="365" placeholder="Número" min="1" required>
-                    <select id="unidadeTempo" class="period-select">
-                        <option value="dias">Dias</option>
-                        <option value="meses">Meses</option>
-                        <option value="anos">Anos</option>
-                    </select>
+            <form id="formSimulador">
+                <div class="form-group">
+                    <label for="valorInvestido">Valor da Aplicação</label>
+                    <input type="text" id="valorInvestido" class="input-group__input currency" placeholder="R$ 0,00" required>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="taxaDI">Taxa DI:</label>
-                <input type="text" id="taxaDI" name="taxaDI" placeholder="Insira a taxa DI (% ao ano)" />
-            </div>
+                <div class="form-group">
+                    <label for="tempo">Vencimento</label>
+                    <div class="period-group">
+                        <input type="number" id="tempo" class="period-input" value="365" placeholder="Número" min="1" required>
+                        <select id="unidadeTempo" class="period-select">
+                            <option value="dias">Dias</option>
+                            <option value="meses">Meses</option>
+                            <option value="anos">Anos</option>
+                        </select>
+                    </div>
+                </div>
 
-            <div class="form-group">
-                <label for="percentualDI_CDB">CDB/RDB</label>
-                <input type="text" id="percentualDI_CDB" class="input-group__input currency" placeholder="100% DI" step="0.01" min="0">
-            </div>
+                <div class="form-group">
+                    <label for="taxaDI">Taxa DI:</label>
+                    <input type="text" id="taxaDI" name="taxaDI" placeholder="Taxa DI (% ao ano)" />
+                </div>
 
-            <div class="form-group">
-                <label for="percentualDI_LCX">LCI/LCA</label>
-                <input type="text" id="percentualDI_LCX" class="input-group__input currency" placeholder="100% DI" step="0.01" min="0">
-            </div>
-        </div>
+                <div class="form-group">
+                    <label for="percentualDI_CDB">CDB/RDB:</label>
+                    <input type="text" id="percentualDI_CDB" class="input-group__input currency" placeholder="100% DI" step="0.01" min="0">
+                </div>
 
-        <div class="results-container">
+                <div class="form-group">
+                    <label for="percentualDI_LCX">LCI/LCA:</label>
+                    <input type="text" id="percentualDI_LCX" class="input-group__input currency" placeholder="100% DI" step="0.01" min="0">
+                </div>
+            </form>
+        </section>
+
+        <section class="results-container">
             <h2 class="title">Simulação</h2>
             <p class="subtitle">Rentabilidade do seu investimento de acordo com o tipo de aplicação.</p>
             <div id="resultadoPoupanca" class="result-item"></div>
@@ -60,11 +62,11 @@
             <div class="warning-message">
                 <i class="fas fa-exclamation-triangle"></i> Simulação baseada na data <strong><span id="dataAtual" data-value=""></span></strong>, utilizando as taxas mais recentes disponibilizadas pelo <strong>Banco Central do Brasil</strong>.
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
     <footer>
         <p>&copy; 2024 Kaio Novaes. Todos os direitos reservados.</p>
     </footer>
-    <script src="script.js"></script>
+    <script src="interacaoUsuario.js" type="module"></script>
 </body>
 </html>

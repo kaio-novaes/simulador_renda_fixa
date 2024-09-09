@@ -156,7 +156,7 @@ footer {
     }
 
     .central-image {
-        max-width: 60%; /* Ajusta o tamanho máximo da imagem em telas menores */
+        max-width: 15%; /* Ajusta o tamanho máximo da imagem em telas menores */
     }
 }
 
