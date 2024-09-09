@@ -40,7 +40,7 @@ header {
 .nav-links a {
     color: #333; /* Cor do ícone */
     text-decoration: none;
-    font-size: 25px; /* Reduzido para 20px */
+    font-size: 25px; /* Tamanho dos ícones */
     transition: color 0.3s ease; /* Transição de cor */
 }
 
@@ -51,7 +51,7 @@ header {
 /* Ajuste do container principal */
 main.container {
     width: 100%;
-    max-width: 900px; /* Manter o tamanho máximo do container */
+    max-width: 1000px; /* Manter o tamanho máximo do container */
     background: #fff;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
     border-radius: 10px; /* Bordas arredondadas */
@@ -74,7 +74,7 @@ h1 {
 .central-image {
     display: block;
     margin: 20px auto; /* Centraliza a imagem horizontalmente e adiciona margem acima e abaixo */
-    max-width: 20%; 
+    max-width: 15%; /* Ajustado para tamanhos de imagem em dispositivos menores */
     height: auto; /* Mantém a proporção da imagem */
 }
 
@@ -97,6 +97,7 @@ p {
     display: flex;
     justify-content: center; /* Centraliza os ícones horizontalmente */
     gap: 20px; /* Espaçamento ajustado entre os ícones */
+    flex-wrap: wrap; /* Permite quebra de linha em telas menores */
 }
 
 .social-links a {
@@ -133,8 +134,60 @@ p {
 }
 
 footer {
-    margin-top: 5px;
+    margin-top: 3px;
     text-align: center;
     font-size: 15px;
     color: #666;
+}
+
+/* Consultas de Mídia para Responsividade */
+@media (max-width: 768px) {
+    .nav-links a {
+        font-size: 20px; /* Ajusta o tamanho dos ícones em telas menores */
+    }
+
+    main.container {
+        padding: 15px; /* Reduz o padding em telas menores */
+        margin-top: 50px; /* Ajusta o espaçamento abaixo do cabeçalho fixo */
+    }
+
+    h1 {
+        font-size: 22px; /* Reduz o tamanho da fonte do título em telas menores */
+    }
+
+    .central-image {
+        max-width: 60%; /* Ajusta o tamanho máximo da imagem em telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-links a {
+        font-size: 18px; /* Ajusta ainda mais o tamanho dos ícones em telas muito pequenas */
+    }
+
+    main.container {
+        padding: 10px; /* Reduz o padding em telas muito pequenas */
+        margin-top: 40px; /* Ajusta o espaçamento abaixo do cabeçalho fixo */
+    }
+
+    h1 {
+        font-size: 18px; /* Reduz o tamanho da fonte do título em telas muito pequenas */
+    }
+
+    .central-image {
+        max-width: 50%; /* Ajusta o tamanho máximo da imagem em telas muito pequenas */
+    }
+
+    .social-links-container h2 {
+        font-size: 20px; /* Reduz o tamanho da fonte do título das redes sociais */
+    }
+
+    .social-links a {
+        font-size: 18px; /* Ajusta o tamanho dos ícones em telas muito pequenas */
+        padding: 6px; /* Reduz o padding ao redor dos ícones */
+    }
+
+    footer {
+        font-size: 13px; /* Ajusta o tamanho da fonte do rodapé em telas muito pequenas */
+    }
 }
