@@ -5,39 +5,25 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    align-items: center;
+    flex-direction: column; /* Alinhar conteúdo em coluna */
+    min-height: 100vh; /* Garantir altura mínima de tela */
+    align-items: center; /* Alinhamento horizontal ao centro */
 }
 
 header {
-    width: 100%;
-    position: fixed;
+    width: 100%; /* Largura total do cabeçalho */
+    position: fixed; /* Fixa o cabeçalho no topo */
     top: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 1000; /* Garante que o cabeçalho esteja acima de outros elementos */
     display: flex;
-    justify-content: flex-end;
-    padding: 10px;
-}
-
-.title {
-    margin-bottom: 8px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #333;
-}
-
-.subtitle {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 16px;
-    color: #555;
+    justify-content: flex-end; /* Alinha o conteúdo ao final do cabeçalho */
+    padding: 10px; /* Padding ao redor da barra de navegação */
 }
 
 .navbar {
     display: flex;
-    align-items: center;
+    align-items: center; /* Alinha os itens verticalmente */
 }
 
 .nav-links {
@@ -48,149 +34,107 @@ header {
 }
 
 .nav-links li {
-    margin: 0;
+    margin: 0; /* Remove margens laterais */
 }
 
 .nav-links a {
-    color: #333;
+    color: #333; /* Cor do ícone */
     text-decoration: none;
-    font-size: 25px;
-    transition: color 0.3s ease;
+    font-size: 25px; /* Reduzido para 20px */
+    transition: color 0.3s ease; /* Transição de cor */
 }
 
 .nav-links a:hover {
-    color: #007bff;
+    color: #007bff; /* Cor ao passar o mouse */
 }
 
-.container {
+/* Ajuste do container principal */
+main.container {
     width: 100%;
-    max-width: 1250px;
+    max-width: 900px; /* Manter o tamanho máximo do container */
     background: #fff;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 15px;
-    box-sizing: border-box;
-    margin-top: 25px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
+    border-radius: 10px; /* Bordas arredondadas */
+    padding: 20px;
+    box-sizing: border-box; /* Inclui padding e bordas na largura total */
+    margin-top: 60px; /* Espaçamento aumentado abaixo do cabeçalho fixo */
     display: flex;
-    flex-direction: row;
-    gap: 10px;
+    flex-direction: column; /* Coluna para conteúdo */
+    gap: 12px; /* Espaçamento entre containers */
 }
 
-.form-container {
-    flex: 0.60;
-    background: #fafafa;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
-    box-sizing: border-box;
-    min-width: 0;
-    min-height: 350px;
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px; /* Margem reduzida embaixo do título */
+    font-size: 26px; /* Fonte ajustada */
+    font-weight: 600; /* Peso de fonte moderado */
 }
 
-.results-container {
-    flex: 1;
-    background: #fafafa;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
-    box-sizing: border-box;
-    min-width: 0;
-    min-height: 350px;
-}
-
-.form-group {
-    margin-bottom: 10px;
-}
-
-label {
+.central-image {
     display: block;
-    margin-bottom: 4px;
-    font-weight: 550;
-    color: #444;
+    margin: 20px auto; /* Centraliza a imagem horizontalmente e adiciona margem acima e abaixo */
+    max-width: 20%; 
+    height: auto; /* Mantém a proporção da imagem */
 }
 
-input[type="text"],
-input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-    box-sizing: border-box;
+p {
+    margin-bottom: 3px; /* Reduzido o espaço entre parágrafos */
 }
 
-.period-group {
+.social-links-container {
+    text-align: center; /* Centraliza o texto dentro do contêiner */
+    margin-top: 30px; /* Espaço acima dos links de redes sociais */
+}
+
+.social-links-container h2 {
+    font-size: 24px; /* Reduzido para 24px */
+    color: #333; /* Cor do título */
+    margin-bottom: 20px; /* Espaço abaixo do título */
+}
+
+.social-links {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    justify-content: center; /* Centraliza os ícones horizontalmente */
+    gap: 20px; /* Espaçamento ajustado entre os ícones */
 }
 
-.period-input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
+.social-links a {
+    text-decoration: none; /* Remove sublinhado dos links */
+    display: flex; /* Usa flexbox para centralizar o texto ao lado dos ícones */
+    align-items: center; /* Alinha verticalmente o texto com os ícones */
+    gap: 5px; /* Espaçamento entre o ícone e o texto */
+    padding: 8px; /* Padding ao redor dos ícones */
+    font-size: 20px; /* Tamanho dos ícones */
+    border-radius: 5px; /* Bordas arredondadas para os ícones */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave para cor de fundo e texto */
 }
 
-.period-select {
-    flex-shrink: 0;
-    width: auto;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-    background-color: #fafafa;
-    appearance: none;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+.social-links a.linkedin {
+    color: #fff; /* Cor do texto dos links */
+    background-color: #0077b5; /* Cor de fundo para LinkedIn */
 }
 
-.period-select::-ms-expand {
-    display: none;
+.social-links a.github {
+    color: #fff; /* Cor do texto dos links */
+    background-color: #181717; /* Cor de fundo para GitHub */
 }
 
-.button-group {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
+.social-links a:hover {
+    opacity: 0.8; /* Reduz a opacidade ao passar o mouse para um efeito visual */
 }
 
-#results {
-    margin-top: 8px;
+.social-links i {
+    font-size: 18px; /* Tamanho dos ícones */
 }
 
-.result-item {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding: 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #ffffff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease;
-}
-
-.result-item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.warning-message {
-    margin-top: 8px;
-    padding: 10px;
-    background-color: #fff3cd;
-    border: 1px solid #ffeeba;
-    border-radius: 8px;
-    color: #856404;
-    font-size: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.social-links span {
+    font-size: 14px; /* Tamanho do texto ao lado dos ícones */
 }
 
 footer {
-    margin-top: auto;
-    padding: 10px;
+    margin-top: 5px;
     text-align: center;
-    font-size: 14px;
+    font-size: 15px;
     color: #666;
 }
