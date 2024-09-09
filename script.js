@@ -1,17 +1,18 @@
 // Função para formatar a taxa DI para exibição
 const formatarTaxaDI = (taxaDI) => {
     if (isNaN(taxaDI)) return 'Não disponível';
-    // Aqui assumimos que a taxa DI vem como uma porcentagem, mas sem o sinal de %
     return `${taxaDI.toFixed(2).replace('.', ',')}%`;
 };
 
 // Função para atualizar o valor da Taxa DI no campo de entrada
+let taxaDIAtual = null; // Variável global para armazenar a taxa DI atual
+
 async function atualizarTaxaDI() {
-    const taxaDI = await obterTaxaDI();
+    taxaDIAtual = await obterTaxaDI(); // Atualiza a taxa DI padrão
     const campoTaxaDI = document.getElementById("taxaDI");
 
-    if (taxaDI !== null) {
-        campoTaxaDI.value = formatarTaxaDI(taxaDI);
+    if (taxaDIAtual !== null) {
+        campoTaxaDI.value = formatarTaxaDI(taxaDIAtual);
     } else {
         campoTaxaDI.value = "Não disponível";
     }
@@ -173,16 +174,18 @@ async function atualizarResultados() {
     }
 
     const dias = converterParaDias(tempo, unidade);
-    let taxaDI;
+    let taxaDI = taxaDIAtual; // Usar a taxa DI padrão inicialmente
 
-    // Verifica se o usuário forneceu uma taxa DI
+    // Verifica se o usuário forneceu uma taxa DI e se ela é válida
     if (taxaDIUsuario) {
-        taxaDI = parseFloat(taxaDIUsuario);
-        if (isNaN(taxaDI)) {
-            taxaDI = await obterTaxaDI(); // Usa a taxa padrão se o valor inserido não for válido
+        const taxaDIUsuarioFloat = parseFloat(taxaDIUsuario);
+        if (!isNaN(taxaDIUsuarioFloat) && taxaDIUsuarioFloat > 0) {
+            taxaDI = taxaDIUsuarioFloat; // Usa a taxa fornecida pelo usuário
+        } else {
+            document.getElementById("taxaDI").value = formatarTaxaDI(taxaDIAtual); // Restaura a taxa padrão no campo de entrada
         }
     } else {
-        taxaDI = await obterTaxaDI(); // Usa a taxa padrão se o campo estiver vazio
+        document.getElementById("taxaDI").value = formatarTaxaDI(taxaDIAtual); // Restaura a taxa padrão no campo de entrada se vazio
     }
 
     // Atualiza o resultado da poupança
