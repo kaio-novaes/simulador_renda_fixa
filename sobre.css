@@ -79,7 +79,7 @@ main.container {
     border-radius: 10px; /* Bordas arredondadas */
     padding: 20px;
     box-sizing: border-box; /* Inclui padding e bordas na largura total */
-    margin-top: 60px; /* Espaçamento abaixo do cabeçalho fixo */
+    margin-top: 55px; /* Espaçamento abaixo do cabeçalho fixo */
     display: flex;
     flex-direction: column; /* Layout em coluna */
     gap: 12px; /* Espaçamento entre containers */

@@ -78,7 +78,7 @@ header {
     border-radius: 12px;
     padding: 20px;
     box-sizing: border-box;
-    margin-top: 50px;
+    margin-top: 55px;
     display: flex;
     flex-direction: row;
     gap: 20px;
@@ -196,8 +196,8 @@ input[type="number"] {
     height: 22px; /* Altura do ícone */
     border-radius: 12px; /* Bordas bem arredondadas */
     color: #fff; /* Cor do texto dentro do ícone */
-    font-size: 12px; /* Tamanho da fonte para o texto */
-    font-weight: 500;
+    font-size: 13px; /* Tamanho da fonte para o texto */
+    font-weight: 525;
     text-align: center;
     line-height: 1;
     margin-left: 2px; /* Espaço entre o texto e o ícone */
@@ -209,11 +209,11 @@ input[type="number"] {
 }
 
 .ir-20 {
-    background-color: #ffc107; /* Amarelo para 20% */
+    background-color: #F2B705; /* Amarelo para 20% */
 }
 
 .ir-17-5 {
-    background-color: #ffc107; /* Amarelo para 17,5% */
+    background-color: #F2B705; /* Amarelo para 17,5% */
 }
 
 .ir-15 {
