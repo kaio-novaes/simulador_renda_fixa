@@ -187,6 +187,27 @@ input[type="number"] {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
 }
+.ir-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* Largura do ícone */
+    height: 22px; /* Altura do ícone */
+    border-radius: 12px; /* Bordas bem arredondadas */
+    background-color: #007bff; /* Cor de fundo do ícone */
+    color: #fff; /* Cor do texto dentro do ícone */
+    font-size: 12px; /* Tamanho da fonte para o texto */
+    font-weight: 500;
+    text-align: center;
+    line-height: 1;
+    margin-left: 2px; /* Espaço entre o texto e o ícone */
+    padding: 0 8px; /* Adiciona um pouco de espaço interno horizontal */
+}
+
+.ir-icon span {
+    display: inline-block;
+    font-size: 12px; /* Tamanho da fonte para a porcentagem */
+}
 
 .warning-message {
     margin-top: 5px;
