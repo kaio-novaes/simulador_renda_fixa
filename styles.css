@@ -144,6 +144,10 @@ input[type="number"] {
     min-width: 180px;
 }
 
+.select-container {
+    position: relative;
+}
+
 .period-select {
     flex-shrink: 0;
     width: auto;
@@ -158,6 +162,20 @@ input[type="number"] {
 
 .period-select::-ms-expand {
     display: none;
+}
+
+.toggle-icon {
+    position: absolute;
+    right: 10px; /* Ajuste conforme necessário */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+}
+
+.toggle-icon:hover {
+    color: #333;
 }
 
 .button-group {
@@ -343,6 +361,23 @@ footer {
 
     footer {
         font-size: 12px;
-        font-size: 12px;
     }
+}
+
+.select-container {
+    position: relative;
+}
+
+.toggle-icon {
+    position: absolute;
+    right: 8px; /* Ajuste conforme necessário */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 12px;
+}
+
+.toggle-icon:hover {
+    color: #333;
 }

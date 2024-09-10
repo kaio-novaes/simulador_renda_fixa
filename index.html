@@ -28,11 +28,14 @@
                     <label for="tempo">Vencimento</label>
                     <div class="period-group">
                         <input type="number" id="tempo" class="period-input" value="365" placeholder="Número" min="1" required>
-                        <select id="unidadeTempo" class="period-select">
-                            <option value="dias">Dias</option>
-                            <option value="meses">Meses</option>
-                            <option value="anos">Anos</option>
-                        </select>
+                        <div class="select-container">
+                            <select id="unidadeTempo" class="period-select">
+                                <option value="dias">Dias</option>
+                                <option value="meses">Meses</option>
+                                <option value="anos">Anos</option>
+                            </select>
+                            <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+                        </div>
                     </div>
                 </div>
 
