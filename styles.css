@@ -265,15 +265,6 @@ h3 {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-footer {
-    margin-top: 8px;
-    padding: 12px;
-    text-align: center;
-    font-size: 16px;
-    color: #666;
-}
-
-
 /* Telas menores que 768px */
 @media (max-width: 768px) {
     .header-logo {
@@ -322,8 +313,14 @@ footer {
     .period-input {
         min-width: 120px; /* Ajuste a largura mínima em telas menores */
     }
+
+    .warning-message {
+        font-size: 11px; /* Ajusta o tamanho da fonte para maior legibilidade em telas menores */
+        padding: 10px; /* Ajusta o padding para uma melhor visualização */
+    }
 }
 
+/* Telas menores que 480px */
 @media (max-width: 480px) {
     .header-logo {
         font-size: 20px;
@@ -366,10 +363,11 @@ footer {
     }
 
     .warning-message {
-        font-size: 8px;
+        font-size: 10px; /* Reduz ainda mais o tamanho da fonte para pequenos dispositivos */
+        padding: 8px; /* Ajusta o padding para economizar espaço */
     }
 
     footer {
-        font-size: 20px;
+        font-size: 14px; /* Ajusta o tamanho da fonte do rodapé para melhor legibilidade */
     }
 }
