@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f5f7fa; /* Cor de fundo levemente mais clara para um visual mais moderno */
+    background-color: #f5f7fa;
     color: #333;
     margin: 0;
     padding: 0;
@@ -25,15 +25,16 @@ header {
     z-index: 1000;
     display: flex;
     justify-content: flex-end;
-    padding: 10px;
+    align-items: center;
+    padding: 15px 30px;
 }
 
 .header-logo {
-    font-size: 28px; /* Tamanho maior para o logotipo */
+    font-size: 28px;
     font-weight: 700;
     color: #333;
-    text-transform: uppercase; /* Maiúsculas para um visual mais forte */
-    order: 2; /* Move o logotipo para o lado direito */
+    text-transform: uppercase;
+    order: 2;
 }
 
 .navbar {
@@ -46,7 +47,7 @@ header {
     padding: 0;
     margin: 0;
     display: flex;
-    gap: 20px; /* Espaçamento entre links aumentado */
+    gap: 20px;
 }
 
 .nav-links li {
@@ -56,32 +57,32 @@ header {
 .nav-links a {
     color: #333;
     text-decoration: none;
-    font-size: 25px; /* Ajustado para melhor legibilidade */
+    font-size: 25px;
     transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
-    padding: 8px 12px; /* Padding adicionado para um efeito de botão */
-    border-radius: 5px; /* Bordas arredondadas para um estilo mais moderno */
+    padding: 8px 12px;
+    border-radius: 5px;
 }
 
 .nav-links a:hover,
 .nav-links a:focus {
     color: #007bff;
-    background-color: #f0f8ff; /* Leve fundo ao passar o mouse */
-    transform: translateY(-2px); /* Efeito de elevação sutil */
+    background-color: #f0f8ff;
+    transform: translateY(-2px);
 }
 
 /* Ajuste do container principal */
 .container {
     width: 100%;
-    max-width: 1200px; /* Ajustado para melhor compatibilidade com telas grandes */
+    max-width: 1200px;
     background: #ffffff;
     border-radius: 12px;
     padding: 20px;
     box-sizing: border-box;
-    margin-top: 50px; /* Maior separação do header */
+    margin-top: 50px;
     display: flex;
     flex-direction: row;
     gap: 20px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave e ampla */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 .form-container,
@@ -94,7 +95,7 @@ header {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Aumentado para um espaçamento mais confortável */
+    gap: 15px;
 }
 
 .form-container {
@@ -103,10 +104,11 @@ header {
 
 .results-container {
     flex: 1;
+    overflow: auto; /* Adiciona rolagem se necessário */
 }
 
 .form-group {
-    margin-bottom: 15px; /* Aumentado para um melhor espaçamento */
+    margin-bottom: 15px;
 }
 
 label {
@@ -114,7 +116,7 @@ label {
     margin-bottom: 6px;
     font-weight: 600;
     color: #444;
-    font-size: 16px; /* Tamanho da fonte aumentado para clareza */
+    font-size: 16px;
 }
 
 input[type="text"],
@@ -122,8 +124,8 @@ input[type="number"] {
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 6px; /* Bordas ligeiramente mais arredondadas */
-    font-size: 16px; /* Tamanho da fonte ajustado para melhor legibilidade */
+    border-radius: 6px;
+    font-size: 16px;
     box-sizing: border-box;
 }
 
@@ -165,7 +167,7 @@ input[type="number"] {
 }
 
 #results {
-    margin-top: 15px; /* Maior separação para clareza */
+    margin-top: 15px;
 }
 
 .result-item {
@@ -176,13 +178,14 @@ input[type="number"] {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: box-shadow 0.3s ease, background-color 0.3s ease;
     overflow: hidden;
-    max-height: 120px;
+    max-height: none; /* Remove o limite de altura máxima */
+    /* Ajuste o tamanho máximo conforme necessário */
 }
 
 .result-item:hover,
 .result-item:focus {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9; /* Leve fundo ao passar o mouse */
+    background-color: #f9f9f9;
 }
 
 .warning-message {
@@ -197,7 +200,7 @@ input[type="number"] {
 }
 
 footer {
-    margin-top: 8px; /* Maior separação para destaque */
+    margin-top: 8px;
     padding: 12px;
     text-align: center;
     font-size: 16px;
@@ -302,6 +305,7 @@ footer {
     }
 
     footer {
+        font-size: 12px;
         font-size: 12px;
     }
 }
