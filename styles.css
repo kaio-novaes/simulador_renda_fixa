@@ -78,7 +78,7 @@ header {
     border-radius: 12px;
     padding: 20px;
     box-sizing: border-box;
-    margin-top: 55px;
+    margin-top: 50px;
     display: flex;
     flex-direction: row;
     gap: 20px;
@@ -146,11 +146,13 @@ input[type="number"] {
 
 .select-container {
     position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
 }
 
 .period-select {
-    flex-shrink: 0;
-    width: auto;
+    flex: 1;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -166,16 +168,17 @@ input[type="number"] {
 
 .toggle-icon {
     position: absolute;
-    right: 10px; /* Ajuste conforme necessário */
+    right: 12px; /* Ajuste conforme necessário */
     top: 50%;
     transform: translateY(-50%);
-    cursor: pointer;
     color: #666;
-    font-size: 18px;
+    font-size: 12px;
+    cursor: pointer;
+    pointer-events: none; /* Remove eventos de clique para garantir que o <select> receba o clique */
 }
 
-.toggle-icon:hover {
-    color: #333;
+.toggle-icon i {
+    font-size: 16px; /* Ajusta o tamanho do ícone */
 }
 
 .button-group {
@@ -362,22 +365,4 @@ footer {
     footer {
         font-size: 12px;
     }
-}
-
-.select-container {
-    position: relative;
-}
-
-.toggle-icon {
-    position: absolute;
-    right: 8px; /* Ajuste conforme necessário */
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #666;
-    font-size: 12px;
-}
-
-.toggle-icon:hover {
-    color: #333;
 }
