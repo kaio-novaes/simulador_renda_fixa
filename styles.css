@@ -1,6 +1,13 @@
+/* Reset básico para garantir consistência entre navegadores */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f0f2f5;
+    background-color: #f5f7fa; /* Cor de fundo levemente mais clara para um visual mais moderno */
     color: #333;
     margin: 0;
     padding: 0;
@@ -19,21 +26,14 @@ header {
     display: flex;
     justify-content: flex-end;
     padding: 10px;
-    background: #fff; /* Fundo branco para melhor visibilidade */
 }
 
-.title {
-    margin-bottom: 8px;
-    font-size: 22px;
-    font-weight: bold;
+.header-logo {
+    font-size: 28px; /* Tamanho maior para o logotipo */
+    font-weight: 700;
     color: #333;
-}
-
-.subtitle {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 16px;
-    color: #555;
+    text-transform: uppercase; /* Maiúsculas para um visual mais forte */
+    order: 2; /* Move o logotipo para o lado direito */
 }
 
 .navbar {
@@ -46,6 +46,7 @@ header {
     padding: 0;
     margin: 0;
     display: flex;
+    gap: 20px; /* Espaçamento entre links aumentado */
 }
 
 .nav-links li {
@@ -55,96 +56,99 @@ header {
 .nav-links a {
     color: #333;
     text-decoration: none;
-    font-size: 25px;
-    transition: color 0.3s ease;
+    font-size: 25px; /* Ajustado para melhor legibilidade */
+    transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    padding: 8px 12px; /* Padding adicionado para um efeito de botão */
+    border-radius: 5px; /* Bordas arredondadas para um estilo mais moderno */
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a:focus {
     color: #007bff;
+    background-color: #f0f8ff; /* Leve fundo ao passar o mouse */
+    transform: translateY(-2px); /* Efeito de elevação sutil */
 }
 
 /* Ajuste do container principal */
 .container {
     width: 100%;
-    max-width: 1250px;
-    background: #fff;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 15px;
+    max-width: 1200px; /* Ajustado para melhor compatibilidade com telas grandes */
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
     box-sizing: border-box;
-    margin-top: 40px; /* Ajustado para evitar sobreposição com header */
+    margin-top: 50px; /* Maior separação do header */
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave e ampla */
+}
+
+.form-container,
+.results-container {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Aumentado para um espaçamento mais confortável */
 }
 
 .form-container {
-    flex: 0.60;
-    background: #fafafa;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
-    box-sizing: border-box;
-    min-width: 0;
-    min-height: 350px;
+    flex: 0.5;
 }
 
 .results-container {
     flex: 1;
-    background: #fafafa;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
-    box-sizing: border-box;
-    min-width: 0;
-    min-height: 350px;
 }
 
 .form-group {
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* Aumentado para um melhor espaçamento */
 }
 
 label {
     display: block;
-    margin-bottom: 4px;
-    font-weight: 550;
+    margin-bottom: 6px;
+    font-weight: 600;
     color: #444;
+    font-size: 16px; /* Tamanho da fonte aumentado para clareza */
 }
 
 input[type="text"],
 input[type="number"] {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
+    border-radius: 6px; /* Bordas ligeiramente mais arredondadas */
+    font-size: 16px; /* Tamanho da fonte ajustado para melhor legibilidade */
     box-sizing: border-box;
 }
 
 .period-group {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .period-input {
     flex: 1;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-    min-width: 150px; /* Define uma largura mínima para o campo */
+    border-radius: 6px;
+    font-size: 16px;
+    min-width: 180px;
 }
 
 .period-select {
     flex-shrink: 0;
     width: auto;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
+    border-radius: 6px;
+    font-size: 16px;
     background-color: #fafafa;
     appearance: none;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -156,45 +160,47 @@ input[type="number"] {
 
 .button-group {
     display: flex;
-    gap: 8px;
+    gap: 12px;
     justify-content: flex-end;
 }
 
 #results {
-    margin-top: 8px;
+    margin-top: 15px; /* Maior separação para clareza */
 }
 
 .result-item {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     background-color: #ffffff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    overflow: hidden;
+    max-height: 120px;
 }
 
-.result-item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.result-item:hover,
+.result-item:focus {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9; /* Leve fundo ao passar o mouse */
 }
 
 .warning-message {
     margin-top: 5px;
-    padding: 10px;
+    padding: 12px;
     background-color: #fff3cd;
     border: 1px solid #ffeeba;
     border-radius: 8px;
     color: #856404;
-    font-size: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    font-size: 12.5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 footer {
-    margin-top: 3px;
-    padding: 10px;
+    margin-top: 8px; /* Maior separação para destaque */
+    padding: 12px;
     text-align: center;
-    font-size: 14px;
+    font-size: 16px;
     color: #666;
 }
 
@@ -202,12 +208,16 @@ footer {
 
 /* Telas menores que 768px */
 @media (max-width: 768px) {
+    .header-logo {
+        font-size: 24px;
+    }
+
     .title {
-        font-size: 18px; /* Ajuste para tamanhos menores */
+        font-size: 18px;
     }
 
     .subtitle {
-        font-size: 14px; /* Ajuste para tamanhos menores */
+        font-size: 14px;
     }
 
     .navbar {
@@ -216,44 +226,47 @@ footer {
     }
 
     .nav-links {
-        flex-direction: column; /* Empilha links verticalmente */
+        flex-direction: column;
     }
 
     .nav-links a {
-        font-size: 20px; /* Ajuste para tamanhos menores */
+        font-size: 20px;
     }
 
     .container {
-        flex-direction: column; /* Empilha containers verticalmente */
-        gap: 15px; /* Aumenta o espaço entre containers */
+        flex-direction: column;
+        gap: 0;
     }
 
     .form-container,
     .results-container {
-        min-height: auto; /* Remove altura mínima */
-        width: 100%; /* Ajusta para largura total */
-        margin: 0; /* Remove margem */
-        margin-bottom: 15px; /* Adiciona margem inferior para separação */
+        min-height: auto;
+        width: 100%;
+        margin: 0;
+        margin-bottom: 15px;
     }
 
     .button-group {
-        flex-direction: column; /* Empilha botões verticalmente */
-        align-items: flex-end; /* Alinha à direita */
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .period-input {
+        min-width: 120px; /* Ajuste a largura mínima em telas menores */
     }
 }
 
-/* Telas menores que 480px */
 @media (max-width: 480px) {
-    .period-input {
-        min-width: 100px; /* Ajuste a largura mínima em telas muito pequenas */
+    .header-logo {
+        font-size: 20px;
     }
 
     .title {
-        font-size: 16px; /* Ajuste para tamanhos menores */
+        font-size: 16px;
     }
 
     .subtitle {
-        font-size: 12px; /* Ajuste para tamanhos menores */
+        font-size: 12px;
     }
 
     .navbar {
@@ -261,49 +274,34 @@ footer {
     }
 
     .nav-links a {
-        font-size: 18px; /* Ajuste para tamanhos menores */
+        font-size: 18px;
     }
 
     .form-container,
     .results-container {
-        padding: 10px; /* Reduz padding */
+        padding: 10px;
     }
 
     input[type="text"],
     input[type="number"] {
-        font-size: 12px; /* Reduz tamanho da fonte */
+        font-size: 12px;
     }
 
     .period-input,
     .period-select {
-        font-size: 12px; /* Reduz tamanho da fonte */
+        font-size: 12px;
     }
 
     .result-item {
-        font-size: 12px; /* Reduz tamanho da fonte */
-        padding: 8px; /* Reduz padding */
+        font-size: 12px;
+        padding: 8px;
     }
 
     .warning-message {
-        font-size: 10px; /* Ajuste para tamanhos menores */
+        font-size: 8px;
     }
 
     footer {
-        font-size: 12px; /* Reduz tamanho da fonte */
-    }
-}
-
-/* Telas maiores que 768px */
-@media (min-width: 768px) {
-    .container {
-        flex-direction: row; /* Mantém a disposição em linha */
-    }
-
-    .form-container {
-        flex: 0.60; /* Mantém a proporção */
-    }
-
-    .results-container {
-        flex: 1; /* Mantém a proporção */
+        font-size: 12px;
     }
 }

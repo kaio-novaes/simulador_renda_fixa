@@ -1,29 +1,45 @@
+/* Reset básico para garantir consistência entre navegadores */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f0f2f5;
+    background-color: #f5f7fa; /* Cor de fundo levemente mais clara para um visual mais moderno */
     color: #333;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column; /* Alinhar conteúdo em coluna */
-    min-height: 100vh; /* Garantir altura mínima de tela */
-    align-items: center; /* Alinhamento horizontal ao centro */
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
 }
 
 header {
-    width: 100%; /* Largura total do cabeçalho */
-    position: fixed; /* Fixa o cabeçalho no topo */
+    width: 100%;
+    position: fixed;
     top: 0;
     right: 0;
-    z-index: 1000; /* Garante que o cabeçalho esteja acima de outros elementos */
+    z-index: 1000;
     display: flex;
-    justify-content: flex-end; /* Alinha o conteúdo ao final do cabeçalho */
-    padding: 10px; /* Padding ao redor da barra de navegação */
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px 30px; /* Padding ajustado para um visual mais equilibrado */
+}
+
+.header-logo {
+    font-size: 28px; /* Tamanho maior para o logotipo */
+    font-weight: 700;
+    color: #333;
+    text-transform: uppercase; /* Maiúsculas para um visual mais forte */
+    order: 2; /* Move o logotipo para o lado direito */
 }
 
 .navbar {
     display: flex;
-    align-items: center; /* Alinha os itens verticalmente */
+    align-items: center;
 }
 
 .nav-links {
@@ -31,35 +47,41 @@ header {
     padding: 0;
     margin: 0;
     display: flex;
+    gap: 20px; /* Espaçamento entre links aumentado */
 }
 
 .nav-links li {
-    margin: 0; /* Remove margens laterais */
+    margin: 0;
 }
 
 .nav-links a {
-    color: #333; /* Cor do ícone */
+    color: #333;
     text-decoration: none;
-    font-size: 25px; /* Tamanho dos ícones */
-    transition: color 0.3s ease; /* Transição de cor */
+    font-size: 25px; /* Ajustado para melhor legibilidade */
+    transition: color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    padding: 8px 12px; /* Padding adicionado para um efeito de botão */
+    border-radius: 5px; /* Bordas arredondadas para um estilo mais moderno */
 }
 
-.nav-links a:hover {
-    color: #007bff; /* Cor ao passar o mouse */
+.nav-links a:hover,
+.nav-links a:focus {
+    color: #007bff;
+    background-color: #f0f8ff; /* Leve fundo ao passar o mouse */
+    transform: translateY(-2px); /* Efeito de elevação sutil */
 }
 
 /* Ajuste do container principal */
 main.container {
     width: 100%;
-    max-width: 1000px; /* Manter o tamanho máximo do container */
+    max-width: 1000px; /* Largura máxima do container */
     background: #fff;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Sombra sutil */
     border-radius: 10px; /* Bordas arredondadas */
     padding: 20px;
     box-sizing: border-box; /* Inclui padding e bordas na largura total */
-    margin-top: 60px; /* Espaçamento aumentado abaixo do cabeçalho fixo */
+    margin-top: 60px; /* Espaçamento abaixo do cabeçalho fixo */
     display: flex;
-    flex-direction: column; /* Coluna para conteúdo */
+    flex-direction: column; /* Layout em coluna */
     gap: 12px; /* Espaçamento entre containers */
 }
 
@@ -67,19 +89,19 @@ h1 {
     text-align: center;
     color: #333;
     margin-bottom: 10px; /* Margem reduzida embaixo do título */
-    font-size: 26px; /* Fonte ajustada */
+    font-size: 26px; /* Tamanho da fonte ajustado */
     font-weight: 600; /* Peso de fonte moderado */
 }
 
 .central-image {
     display: block;
-    margin: 20px auto; /* Centraliza a imagem horizontalmente e adiciona margem acima e abaixo */
+    margin: 20px auto; /* Centraliza horizontalmente e adiciona margem acima e abaixo */
     max-width: 15%; /* Ajustado para tamanhos de imagem em dispositivos menores */
     height: auto; /* Mantém a proporção da imagem */
 }
 
 p {
-    margin-bottom: 3px; /* Reduzido o espaço entre parágrafos */
+    margin-bottom: 8px; /* Espaço aumentado entre parágrafos */
 }
 
 .social-links-container {
@@ -88,7 +110,7 @@ p {
 }
 
 .social-links-container h2 {
-    font-size: 24px; /* Reduzido para 24px */
+    font-size: 24px; /* Tamanho ajustado para o título das redes sociais */
     color: #333; /* Cor do título */
     margin-bottom: 20px; /* Espaço abaixo do título */
 }
@@ -96,7 +118,7 @@ p {
 .social-links {
     display: flex;
     justify-content: center; /* Centraliza os ícones horizontalmente */
-    gap: 20px; /* Espaçamento ajustado entre os ícones */
+    gap: 20px; /* Espaçamento entre ícones */
     flex-wrap: wrap; /* Permite quebra de linha em telas menores */
 }
 
@@ -107,7 +129,7 @@ p {
     gap: 5px; /* Espaçamento entre o ícone e o texto */
     padding: 8px; /* Padding ao redor dos ícones */
     font-size: 20px; /* Tamanho dos ícones */
-    border-radius: 5px; /* Bordas arredondadas para os ícones */
+    border-radius: 5px; /* Bordas arredondadas */
     transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave para cor de fundo e texto */
 }
 
@@ -134,9 +156,10 @@ p {
 }
 
 footer {
-    margin-top: 3px;
+    margin-top: 8px; /* Maior separação para destaque */
+    padding: 12px;
     text-align: center;
-    font-size: 15px;
+    font-size: 16px;
     color: #666;
 }
 
@@ -156,7 +179,7 @@ footer {
     }
 
     .central-image {
-        max-width: 15%; /* Ajusta o tamanho máximo da imagem em telas menores */
+        max-width: 25%; /* Ajusta o tamanho máximo da imagem em telas menores */
     }
 }
 
@@ -175,7 +198,7 @@ footer {
     }
 
     .central-image {
-        max-width: 50%; /* Ajusta o tamanho máximo da imagem em telas muito pequenas */
+        max-width: 40%; /* Ajusta o tamanho máximo da imagem em telas muito pequenas */
     }
 
     .social-links-container h2 {
