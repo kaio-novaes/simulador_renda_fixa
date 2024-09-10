@@ -60,7 +60,6 @@ async function atualizarResultados() {
     const dias = converterParaDias(tempo, unidade);
     let taxaDI = taxaDIAtual; // Usar a taxa DI padrão inicialmente
 
-    // Verifica se o usuário forneceu uma taxa DI e se ela é válida
     if (taxaDIUsuario) {
         const taxaDIUsuarioFloat = parseFloat(taxaDIUsuario);
         if (!isNaN(taxaDIUsuarioFloat) && taxaDIUsuarioFloat > 0) {
@@ -97,18 +96,25 @@ async function atualizarResultados() {
         const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
         const rendimentoLiquidoCDB = valorInvestido + rendimentoBrutoComIOF - ir;
 
+        // Remove classes antigas
+        const irIcon = document.querySelector(".ir-icon");
+        if (irIcon) {
+            irIcon.classList.remove("ir-22-5", "ir-20", "ir-17-5", "ir-15");
+        }
+
+        // Adiciona a classe correta com base na alíquota IR
         let irClass = '';
-        if (aliquotaIR <= 180) irClass = 'ir-22-5';
-        else if (aliquotaIR <= 360) irClass = 'ir-20';
-        else if (aliquotaIR <= 720) irClass = 'ir-17-5';
-        else irClass = 'ir-15';
+        if (aliquotaIR === 22.5) irClass = 'ir-22-5';
+        else if (aliquotaIR === 20) irClass = 'ir-20';
+        else if (aliquotaIR === 17.5) irClass = 'ir-17-5';
+        else if (aliquotaIR === 15) irClass = 'ir-15';
 
         document.getElementById("resultadoCDB-RDB").innerHTML = 
             `<h3>CDB/RDB</h3>
             Valor da Aplicação: ${formatarMoeda(valorInvestido)}<br>
             ${ioef > 0 ? `IOF: ${formatarMoeda(ioef)}<br>` : ''}
             Rendimento Bruto: ${formatarMoeda(rendimentoBrutoCDB)}<br>
-            Imposto de Renda (IR) <span class="ir-icon ${irClass}"></span>(${aliquotaIR}%): ${formatarMoeda(ir)}<br>
+            Imposto de Renda <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span>: ${formatarMoeda(ir)}<br>
             Valor Líquido: ${formatarMoeda(rendimentoLiquidoCDB)}`;
     } else {
         document.getElementById("resultadoCDB-RDB").innerHTML = `<h3>CDB/RDB</h3> Não foi possível obter a taxa DI.`;

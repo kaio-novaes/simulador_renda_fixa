@@ -187,6 +187,7 @@ input[type="number"] {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     background-color: #f9f9f9;
 }
+
 .ir-icon {
     display: inline-flex;
     align-items: center;
@@ -194,7 +195,6 @@ input[type="number"] {
     width: 40px; /* Largura do ícone */
     height: 22px; /* Altura do ícone */
     border-radius: 12px; /* Bordas bem arredondadas */
-    background-color: #007bff; /* Cor de fundo do ícone */
     color: #fff; /* Cor do texto dentro do ícone */
     font-size: 12px; /* Tamanho da fonte para o texto */
     font-weight: 500;
@@ -202,6 +202,22 @@ input[type="number"] {
     line-height: 1;
     margin-left: 2px; /* Espaço entre o texto e o ícone */
     padding: 0 8px; /* Adiciona um pouco de espaço interno horizontal */
+}
+
+.ir-22-5 {
+    background-color: #dc3545; /* Vermelho para 22,5% */
+}
+
+.ir-20 {
+    background-color: #ffc107; /* Amarelo para 20% */
+}
+
+.ir-17-5 {
+    background-color: #ffc107; /* Amarelo para 17,5% */
+}
+
+.ir-15 {
+    background-color: #28a745; /* Verde para 15% */
 }
 
 .ir-icon span {
