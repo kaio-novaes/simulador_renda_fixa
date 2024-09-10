@@ -213,7 +213,7 @@ input[type="number"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px; /* Largura do ícone */
+    width: 45px; /* Largura do ícone */
     height: 22px; /* Altura do ícone */
     border-radius: 12px; /* Bordas bem arredondadas */
     color: #fff; /* Cor do texto dentro do ícone */
@@ -363,6 +363,6 @@ footer {
     }
 
     footer {
-        font-size: 12px;
+        font-size: 14px;
     }
 }
