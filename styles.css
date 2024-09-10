@@ -217,11 +217,11 @@ input[type="number"] {
     height: 22px; /* Altura do ícone */
     border-radius: 12px; /* Bordas bem arredondadas */
     color: #fff; /* Cor do texto dentro do ícone */
-    font-size: 13px; /* Tamanho da fonte para o texto */
+    font-size: 12px; /* Tamanho da fonte para o texto */
     font-weight: 525;
     text-align: center;
     line-height: 1;
-    margin-left: 2px; /* Espaço entre o texto e o ícone */
+    margin-left: 1px; /* Espaço entre o texto e o ícone */
     padding: 0 8px; /* Adiciona um pouco de espaço interno horizontal */
 }
 
