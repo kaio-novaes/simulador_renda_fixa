@@ -114,7 +114,7 @@ async function atualizarResultados() {
             Valor da Aplicação: ${formatarMoeda(valorInvestido)}<br>
             ${ioef > 0 ? `IOF: ${formatarMoeda(ioef)}<br>` : ''}
             Rendimento Bruto: ${formatarMoeda(rendimentoBrutoCDB)}<br>
-            Imposto de Renda <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span>: ${formatarMoeda(ir)}<br>
+            Imposto de Renda ${formatarMoeda(ir)} <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span><br> 
             Valor Líquido: ${formatarMoeda(rendimentoLiquidoCDB)}`;
     } else {
         document.getElementById("resultadoCDB-RDB").innerHTML = `<h3>CDB/RDB</h3> Não foi possível obter a taxa DI.`;

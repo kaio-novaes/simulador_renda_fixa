@@ -209,6 +209,7 @@ input[type="number"] {
     background-color: #f9f9f9;
 }
 
+/* Ajustes no estilo do ícone IR */
 .ir-icon {
     display: inline-flex;
     align-items: center;
@@ -220,11 +221,13 @@ input[type="number"] {
     font-size: 12px; /* Tamanho da fonte para o texto */
     font-weight: 525;
     text-align: center;
-    line-height: 1;
-    margin-left: 1px; /* Espaço entre o texto e o ícone */
+    line-height: 0.5;
+    margin-left: 3px; /* Ajuste o espaço entre o texto e o ícone */
     padding: 0 8px; /* Adiciona um pouco de espaço interno horizontal */
+    vertical-align: middle; /* Alinha verticalmente com o texto */
 }
 
+/* Ajuste dos estilos para as classes de alíquota */
 .ir-22-5 {
     background-color: #dc3545; /* Vermelho para 22,5% */
 }
@@ -244,6 +247,7 @@ input[type="number"] {
 .ir-icon span {
     display: inline-block;
     font-size: 12px; /* Tamanho da fonte para a porcentagem */
+    line-height: 0; /* Alinha verticalmente com o texto */
 }
 
 .warning-message {
@@ -265,7 +269,6 @@ footer {
     color: #666;
 }
 
-/* Consultas de Mídia para Responsividade */
 
 /* Telas menores que 768px */
 @media (max-width: 768px) {
