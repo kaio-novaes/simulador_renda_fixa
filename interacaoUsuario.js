@@ -68,7 +68,12 @@ async function atualizarResultados() {
             document.getElementById("taxaDI").value = formatarTaxaDI(taxaDIAtual); // Restaura a taxa padrão no campo de entrada
         }
     } else {
-        document.getElementById("taxaDI").value = formatarTaxaDI(taxaDIAtual); // Restaura a taxa padrão no campo de entrada se vazio
+        // Define o tempo de atraso em milissegundos (Exemplo: 500 milissegundos = 0,5 segundos)
+        var delay = 2500; // Ajuste o tempo conforme necessário
+    
+        setTimeout(function() {
+            document.getElementById("taxaDI").value = formatarTaxaDI(taxaDIAtual); // Restaura a taxa padrão no campo de entrada se vazio
+        }, delay);
     }
 
     // Atualiza o resultado da poupança
