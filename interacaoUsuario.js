@@ -69,7 +69,7 @@ async function atualizarResultados() {
         }
     } else {
         // Define o tempo de atraso em milissegundos (Exemplo: 500 milissegundos = 0,5 segundos)
-        var delay = 2500; // Ajuste o tempo conforme necessário
+        var delay = 3000; // Ajuste o tempo conforme necessário
     
         setTimeout(function() {
             document.getElementById("taxaDI").value = formatarTaxaDI(taxaDIAtual); // Restaura a taxa padrão no campo de entrada se vazio
