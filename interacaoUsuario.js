@@ -4,18 +4,31 @@ import { calcularRendimentoPoupanca } from './calculoPoupanca.js';
 import { calcularRendimentoCDB, calcularAliquotaIR, calcularIOF } from './calculoCDBRDB.js';
 import { calcularRendimentoLCX } from './calculoLCX.js';
 
+// Cache para armazenar a taxa DI
+let cacheTaxaDI = null;
+
+// Função debounce
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
 // Função para atualizar a taxa DI no campo de entrada
-let taxaDIAtual = null;
-
 async function atualizarTaxaDI() {
-    taxaDIAtual = await obterTaxaDI(); // Atualiza a taxa DI padrão
-    const campoTaxaDI = document.getElementById("taxaDI");
-
-    if (taxaDIAtual !== null) {
-        campoTaxaDI.value = formatarTaxaDI(taxaDIAtual);
-    } else {
-        campoTaxaDI.value = "Não disponível";
+    if (cacheTaxaDI === null) {
+        try {
+            cacheTaxaDI = await obterTaxaDI(); // Atualiza a taxa DI padrão
+        } catch (error) {
+            console.error("Erro ao obter a taxa DI:", error);
+            cacheTaxaDI = 'Não disponível'; // Valor padrão em caso de erro
+        }
     }
+    
+    const campoTaxaDI = document.getElementById("taxaDI");
+    campoTaxaDI.value = cacheTaxaDI !== null ? formatarTaxaDI(cacheTaxaDI) : "Não disponível";
 }
 
 // Função para atualizar o elemento com a data atual
@@ -58,21 +71,21 @@ async function atualizarResultados() {
     }
 
     const dias = converterParaDias(tempo, unidade);
-    let taxaDI = taxaDIAtual; // Usar a taxa DI padrão inicialmente
+    let taxaDI = cacheTaxaDI; // Usar a taxa DI padrão inicialmente
 
     if (taxaDIUsuario) {
         const taxaDIUsuarioFloat = parseFloat(taxaDIUsuario);
         if (!isNaN(taxaDIUsuarioFloat) && taxaDIUsuarioFloat > 0) {
             taxaDI = taxaDIUsuarioFloat; // Usa a taxa fornecida pelo usuário
         } else {
-            document.getElementById("taxaDI").value = formatarTaxaDI(taxaDIAtual); // Restaura a taxa padrão no campo de entrada
+            document.getElementById("taxaDI").value = formatarTaxaDI(cacheTaxaDI); // Restaura a taxa padrão no campo de entrada
         }
     } else {
         // Define o tempo de atraso em milissegundos (Exemplo: 500 milissegundos = 0,5 segundos)
         var delay = 3000; // Ajuste o tempo conforme necessário
-    
+
         setTimeout(function() {
-            document.getElementById("taxaDI").value = formatarTaxaDI(taxaDIAtual); // Restaura a taxa padrão no campo de entrada se vazio
+            document.getElementById("taxaDI").value = formatarTaxaDI(cacheTaxaDI); // Restaura a taxa padrão no campo de entrada se vazio
         }, delay);
     }
 
@@ -141,9 +154,10 @@ async function atualizarResultados() {
     }
 }
 
-// Adiciona evento de mudança ao formulário
+// Adiciona evento de mudança ao formulário com debouncing
 const inputs = document.querySelectorAll("#valorInvestido, #tempo, #unidadeTempo, #percentualDI_CDB, #percentualDI_LCX, #taxaDI");
-inputs.forEach(input => input.addEventListener("input", atualizarResultados));
+const atualizarResultadosDebounced = debounce(atualizarResultados, 300);
+inputs.forEach(input => input.addEventListener("input", atualizarResultadosDebounced));
 
 // Chama a função ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
