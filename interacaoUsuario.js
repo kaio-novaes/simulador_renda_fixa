@@ -147,14 +147,14 @@ async function atualizarResultados() {
         const irClass = `ir-${aliquotaIR.toString().replace('.', '-')}`;
         
         resultadoCDBRDBHTML = 
-            `<h3>CDB/RDB</h3>
+            `<h3>CDB / RDB</h3>
             Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
             ${ioef > 0 ? `IOF: ${formatarValorComoMoeda(ioef)}<br>` : ''}
             Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoCDB)}<br>
             Imposto de Renda ${formatarValorComoMoeda(ir)} <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span><br> 
             Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoCDB)}`;
     } else {
-        resultadoCDBRDBHTML = `<h3>CDB/RDB</h3> Não foi possível obter a taxa DI.`;
+        resultadoCDBRDBHTML = `<h3>CDB / RDB</h3> Não foi possível obter a taxa DI.`;
     }
 
     // Atualiza o resultado do LCI/LCA
@@ -164,12 +164,12 @@ async function atualizarResultados() {
         const rendimentoLiquidoLCX = valorInvestido + rendimentoBrutoLCX;
 
         resultadoLCILCAHTML = 
-            `<h3>LCI/LCA</h3>
+            `<h3>LCI / LCA</h3>
             Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
             Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoLCX)}<br>
             Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoLCX)}`;
     } else {
-        resultadoLCILCAHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa DI.`;
+        resultadoLCILCAHTML = `<h3>LCI / LCA</h3> Não foi possível obter a taxa DI.`;
     }
 
     // Atualize o DOM com os resultados consolidados
