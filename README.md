@@ -6,12 +6,10 @@ O projeto Simulador de Renda Fixa é uma aplicação web que permite simular o r
 [Simulador | Renda Fixa](https://kaio-novaes.github.io/simulador_renda_fixa/)
 
 ## Funcionalidades
-#### Cálculo da Taxa de Juros: 
-Determina a taxa de juros mensal e anual.
-#### Saldo Restante: 
-Mostra o saldo do empréstimo considerando as parcelas pagas.
-Formatação Monetária: Exibe valores em formato brasileiro.
-Validação e Máscara de Entrada: Garante a validade dos dados e formata datas.
+Entrada de Dados: Permite ao usuário inserir valor investido, tempo de aplicação, taxa DI, e percentuais de diferentes investimentos.
+Cálculo de Rendimento: Calcula e exibe o rendimento bruto e líquido de aplicações em poupança, CDB/RDB, e LCI/LCA.
+Atualização Dinâmica: Atualiza os resultados conforme o usuário altera os valores dos campos.
+Taxas Atualizadas: Obtém as taxas mais recentes de poupança e DI do Banco Central do Brasil.
 
 ## Tecnologias Utilizadas
 #### **`index.html:`** HTML (versão 5)
@@ -24,12 +22,6 @@ Lógica da aplicação, incluindo cálculos e interatividade.
 Para obter taxas de juros do Banco Central do Brasil.
 #### **`Font Awesome:`** 
 Para ícones utilizados na interface do usuário.
-
-## Funcionalidades
-Entrada de Dados: Permite ao usuário inserir valor investido, tempo de aplicação, taxa DI, e percentuais de diferentes investimentos.
-Cálculo de Rendimento: Calcula e exibe o rendimento bruto e líquido de aplicações em poupança, CDB/RDB, e LCI/LCA.
-Atualização Dinâmica: Atualiza os resultados conforme o usuário altera os valores dos campos.
-Taxas Atualizadas: Obtém as taxas mais recentes de poupança e DI do Banco Central do Brasil.
 
 ## Requisitos
 Navegador moderno (Chrome, Firefox, Edge, Safari) com suporte para HTML5, CSS3, e ES6.
