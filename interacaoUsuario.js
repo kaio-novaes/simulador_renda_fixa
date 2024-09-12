@@ -1,13 +1,14 @@
-import { formatarTaxaDI, formatarMoeda, aplicarMascaraMoeda, formatarData } from './formatacao.js';
+import { formatarTaxaDI, formatarMoeda, formatarData } from './formatacao.js';
 import { obterTaxaPoupanca, obterTaxaDI } from './api.js';
 import { calcularRendimentoPoupanca } from './calculoPoupanca.js';
 import { calcularRendimentoCDB, calcularAliquotaIR, calcularIOF } from './calculoCDBRDB.js';
 import { calcularRendimentoLCX } from './calculoLCX.js';
 
-// Cache para armazenar a taxa DI
+// Cache para armazenar taxas e resultados
 let cacheTaxaDI = null;
+let cacheTaxaPoupanca = null;
 
-// Função debounce
+// Função debounce para limitar a frequência das atualizações
 function debounce(func, wait) {
     let timeout;
     return function(...args) {
@@ -20,29 +21,26 @@ function debounce(func, wait) {
 async function atualizarTaxaDI() {
     if (cacheTaxaDI === null) {
         try {
-            cacheTaxaDI = await obterTaxaDI(); // Atualiza a taxa DI padrão
+            cacheTaxaDI = await obterTaxaDI();
         } catch (error) {
             console.error("Erro ao obter a taxa DI:", error);
-            cacheTaxaDI = 'Não disponível'; // Valor padrão em caso de erro
+            cacheTaxaDI = 'Não disponível';
         }
     }
-    
-    const campoTaxaDI = document.getElementById("taxaDI");
-    campoTaxaDI.value = cacheTaxaDI !== null ? formatarTaxaDI(cacheTaxaDI) : "Não disponível";
+    document.getElementById("taxaDI").value = formatarTaxaDI(cacheTaxaDI);
 }
 
 // Função para atualizar o elemento com a data atual
 function atualizarDataAtual() {
     const elementoData = document.getElementById('dataAtual');
-    const dataAtual = new Date();
-    const dataFormatada = formatarData(dataAtual);
+    const dataFormatada = formatarData(new Date());
     elementoData.setAttribute('data-value', dataFormatada);
     elementoData.textContent = dataFormatada;
 }
 
 // Função para extrair valor numérico de um campo com máscara
 const extrairValorNumerico = (valor) => {
-    return parseFloat(valor.replace('R$ ', '').replace('.', '').replace(',', '.'));
+    return parseFloat(valor.replace(/[^0-9,]/g, '').replace(',', '.'));
 };
 
 // Função para converter unidades de tempo para dias
@@ -51,11 +49,22 @@ function converterParaDias(tempo, unidade) {
         case 'dias':
             return tempo;
         case 'meses':
-            return Math.round(tempo * 30.41); // Aproxima para o número médio de dias por mês
+            return Math.round(tempo * 30.41);
         case 'anos':
-            return Math.round(tempo * 365); // Aproxima para o número de dias por ano
+            return Math.round(tempo * 365);
         default:
             throw new Error('Unidade de tempo desconhecida');
+    }
+}
+
+// Função para obter todas as taxas
+async function obterTaxas() {
+    try {
+        const [taxaDI, taxaPoupanca] = await Promise.all([obterTaxaDI(), obterTaxaPoupanca()]);
+        return { taxaDI, taxaPoupanca };
+    } catch (error) {
+        console.error("Erro ao obter taxas:", error);
+        return { taxaDI: null, taxaPoupanca: null };
     }
 }
 
@@ -64,49 +73,41 @@ async function atualizarResultados() {
     const valorInvestido = extrairValorNumerico(document.getElementById("valorInvestido").value);
     const tempo = parseInt(document.getElementById("tempo").value);
     const unidade = document.getElementById("unidadeTempo").value;
-    const taxaDIUsuario = document.getElementById("taxaDI").value.replace(',', '.'); // Valor inserido pelo usuário
+    let taxaDI = parseFloat(document.getElementById("taxaDI").value.replace(',', '.')) || cacheTaxaDI;
 
     if (isNaN(valorInvestido) || valorInvestido <= 0 || isNaN(tempo) || tempo <= 0) {
         return;
     }
 
     const dias = converterParaDias(tempo, unidade);
-    let taxaDI = cacheTaxaDI; // Usar a taxa DI padrão inicialmente
 
-    if (taxaDIUsuario) {
-        const taxaDIUsuarioFloat = parseFloat(taxaDIUsuario);
-        if (!isNaN(taxaDIUsuarioFloat) && taxaDIUsuarioFloat > 0) {
-            taxaDI = taxaDIUsuarioFloat; // Usa a taxa fornecida pelo usuário
-        } else {
-            document.getElementById("taxaDI").value = formatarTaxaDI(cacheTaxaDI); // Restaura a taxa padrão no campo de entrada
-        }
-    } else {
-        // Define o tempo de atraso em milissegundos (Exemplo: 500 milissegundos = 0,5 segundos)
-        var delay = 3000; // Ajuste o tempo conforme necessário
+    // Obtém taxas e resultados em paralelo
+    const { taxaDI: taxaDIAtualizada, taxaPoupanca } = await obterTaxas();
+    cacheTaxaDI = taxaDIAtualizada;
+    cacheTaxaPoupanca = taxaPoupanca;
 
-        setTimeout(function() {
-            document.getElementById("taxaDI").value = formatarTaxaDI(cacheTaxaDI); // Restaura a taxa padrão no campo de entrada se vazio
-        }, delay);
-    }
+    // Prepare todos os resultados antes de atualizar o DOM
+    let resultadoPoupancaHTML = '';
+    let resultadoCDBRDBHTML = '';
+    let resultadoLCILCAHTML = '';
 
     // Atualiza o resultado da poupança
-    const taxaPoupanca = await obterTaxaPoupanca();
-    if (taxaPoupanca !== null) {
-        const rendimentoBrutoPoupanca = calcularRendimentoPoupanca(valorInvestido, taxaPoupanca, dias);
+    if (cacheTaxaPoupanca !== null) {
+        const rendimentoBrutoPoupanca = calcularRendimentoPoupanca(valorInvestido, cacheTaxaPoupanca, dias);
         const rendimentoLiquidoPoupanca = valorInvestido + rendimentoBrutoPoupanca;
-
-        document.getElementById("resultadoPoupanca").innerHTML = 
-            `<h3>Poupança</h3>
+        resultadoPoupancaHTML = `
+            <h3>Poupança</h3>
             Valor da Aplicação: ${formatarMoeda(valorInvestido)}<br>
             Rendimento Bruto: ${formatarMoeda(rendimentoBrutoPoupanca)}<br>
-            Valor Líquido: ${formatarMoeda(rendimentoLiquidoPoupanca)}`;
+            Valor Líquido: ${formatarMoeda(rendimentoLiquidoPoupanca)}
+        `;
     } else {
-        document.getElementById("resultadoPoupanca").innerHTML = `<h3>Poupança</h3> Não foi possível obter a taxa de poupança.`;
-    }   
+        resultadoPoupancaHTML = `<h3>Poupança</h3> Não foi possível obter a taxa de poupança.`;
+    }
 
     // Atualiza o resultado do CDB/RDB
     if (taxaDI !== null) {
-        const percentualDI_CDB = parseFloat(document.getElementById("percentualDI_CDB").value) || 100; // Define padrão de 100% se não fornecido
+        const percentualDI_CDB = parseFloat(document.getElementById("percentualDI_CDB").value) || 100;
         const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI * percentualDI_CDB / 100, dias);
         const ioef = calcularIOF(valorInvestido, rendimentoBrutoCDB, dias);
         const rendimentoBrutoComIOF = rendimentoBrutoCDB - ioef;
@@ -121,37 +122,40 @@ async function atualizarResultados() {
         }
 
         // Adiciona a classe correta com base na alíquota IR
-        let irClass = '';
-        if (aliquotaIR === 22.5) irClass = 'ir-22-5';
-        else if (aliquotaIR === 20) irClass = 'ir-20';
-        else if (aliquotaIR === 17.5) irClass = 'ir-17-5';
-        else if (aliquotaIR === 15) irClass = 'ir-15';
-
-        document.getElementById("resultadoCDB-RDB").innerHTML = 
-            `<h3>CDB/RDB</h3>
+        const irClass = `ir-${aliquotaIR.toString().replace('.', '-')}`;
+        
+        resultadoCDBRDBHTML = `
+            <h3>CDB/RDB</h3>
             Valor da Aplicação: ${formatarMoeda(valorInvestido)}<br>
             ${ioef > 0 ? `IOF: ${formatarMoeda(ioef)}<br>` : ''}
             Rendimento Bruto: ${formatarMoeda(rendimentoBrutoCDB)}<br>
             Imposto de Renda ${formatarMoeda(ir)} <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span><br> 
-            Valor Líquido: ${formatarMoeda(rendimentoLiquidoCDB)}`;
+            Valor Líquido: ${formatarMoeda(rendimentoLiquidoCDB)}
+        `;
     } else {
-        document.getElementById("resultadoCDB-RDB").innerHTML = `<h3>CDB/RDB</h3> Não foi possível obter a taxa DI.`;
+        resultadoCDBRDBHTML = `<h3>CDB/RDB</h3> Não foi possível obter a taxa DI.`;
     }
 
     // Atualiza o resultado do LCI/LCA
-    const percentualDI_LCX = parseFloat(document.getElementById("percentualDI_LCX").value) || 100; // Define padrão de 100% se não fornecido
     if (taxaDI !== null) {
+        const percentualDI_LCX = parseFloat(document.getElementById("percentualDI_LCX").value) || 100;
         const rendimentoBrutoLCX = calcularRendimentoLCX(valorInvestido, taxaDI * percentualDI_LCX / 100, dias);
         const rendimentoLiquidoLCX = valorInvestido + rendimentoBrutoLCX;
 
-        document.getElementById("resultadoLCI-LCA").innerHTML = 
-            `<h3>LCI/LCA</h3>
+        resultadoLCILCAHTML = `
+            <h3>LCI/LCA</h3>
             Valor da Aplicação: ${formatarMoeda(valorInvestido)}<br>
             Rendimento Bruto: ${formatarMoeda(rendimentoBrutoLCX)}<br>
-            Valor Líquido: ${formatarMoeda(rendimentoLiquidoLCX)}`;
+            Valor Líquido: ${formatarMoeda(rendimentoLiquidoLCX)}
+        `;
     } else {
-        document.getElementById("resultadoLCI-LCA").innerHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa DI.`;
+        resultadoLCILCAHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa DI.`;
     }
+
+    // Atualize o DOM com os resultados consolidados
+    document.getElementById("resultadoPoupanca").innerHTML = resultadoPoupancaHTML;
+    document.getElementById("resultadoCDB-RDB").innerHTML = resultadoCDBRDBHTML;
+    document.getElementById("resultadoLCI-LCA").innerHTML = resultadoLCILCAHTML;
 }
 
 // Adiciona evento de mudança ao formulário com debouncing
