@@ -38,10 +38,33 @@ function atualizarDataAtual() {
     elementoData.textContent = dataFormatada;
 }
 
-// Função para extrair valor numérico de um campo com máscara
-const extrairValorNumerico = (valor) => {
-    return parseFloat(valor.replace(/[^0-9,]/g, '').replace(',', '.'));
-};
+// Função para formatar valores como moeda com "R$"
+function formatarValorComoMoeda(valor) {
+    return `R$ ${valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+// Função para extrair valor numérico de um campo formatado
+function extrairValorNumerico(valor) {
+    return parseFloat(valor.replace(/[^\d,]/g, '').replace(',', '.'));
+}
+
+// Função para formatar o valor do campo de entrada
+function formatarEntrada(valor) {
+    // Remove tudo o que não é número
+    const valorLimpo = valor.replace(/\D/g, '');
+    // Adiciona a formatação
+    const valorFormatado = valorLimpo.replace(/(\d)(\d{2})$/, '$1,$2')
+                                    .replace(/(\d)(\d{3}),(\d{2})$/, '$1.$2,$3')
+                                    .replace(/(\d)(\d{3})\.(\d{3}),(\d{2})$/, '$1.$2.$3,$4');
+    return `R$ ${valorFormatado}`;
+}
+
+// Função para atualizar o campo com formatação ao digitar
+function atualizarFormatoCampo(event) {
+    const input = event.target;
+    const valorFormatado = formatarEntrada(input.value);
+    input.value = valorFormatado;
+}
 
 // Função para converter unidades de tempo para dias
 function converterParaDias(tempo, unidade) {
@@ -95,12 +118,11 @@ async function atualizarResultados() {
     if (cacheTaxaPoupanca !== null) {
         const rendimentoBrutoPoupanca = calcularRendimentoPoupanca(valorInvestido, cacheTaxaPoupanca, dias);
         const rendimentoLiquidoPoupanca = valorInvestido + rendimentoBrutoPoupanca;
-        resultadoPoupancaHTML = `
-            <h3>Poupança</h3>
-            Valor da Aplicação: ${formatarMoeda(valorInvestido)}<br>
-            Rendimento Bruto: ${formatarMoeda(rendimentoBrutoPoupanca)}<br>
-            Valor Líquido: ${formatarMoeda(rendimentoLiquidoPoupanca)}
-        `;
+        resultadoPoupancaHTML = 
+            `<h3>Poupança</h3>
+            Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
+            Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoPoupanca)}<br>
+            Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoPoupanca)}`;
     } else {
         resultadoPoupancaHTML = `<h3>Poupança</h3> Não foi possível obter a taxa de poupança.`;
     }
@@ -124,14 +146,13 @@ async function atualizarResultados() {
         // Adiciona a classe correta com base na alíquota IR
         const irClass = `ir-${aliquotaIR.toString().replace('.', '-')}`;
         
-        resultadoCDBRDBHTML = `
-            <h3>CDB/RDB</h3>
-            Valor da Aplicação: ${formatarMoeda(valorInvestido)}<br>
-            ${ioef > 0 ? `IOF: ${formatarMoeda(ioef)}<br>` : ''}
-            Rendimento Bruto: ${formatarMoeda(rendimentoBrutoCDB)}<br>
-            Imposto de Renda ${formatarMoeda(ir)} <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span><br> 
-            Valor Líquido: ${formatarMoeda(rendimentoLiquidoCDB)}
-        `;
+        resultadoCDBRDBHTML = 
+            `<h3>CDB/RDB</h3>
+            Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
+            ${ioef > 0 ? `IOF: ${formatarValorComoMoeda(ioef)}<br>` : ''}
+            Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoCDB)}<br>
+            Imposto de Renda ${formatarValorComoMoeda(ir)} <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span><br> 
+            Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoCDB)}`;
     } else {
         resultadoCDBRDBHTML = `<h3>CDB/RDB</h3> Não foi possível obter a taxa DI.`;
     }
@@ -142,12 +163,11 @@ async function atualizarResultados() {
         const rendimentoBrutoLCX = calcularRendimentoLCX(valorInvestido, taxaDI * percentualDI_LCX / 100, dias);
         const rendimentoLiquidoLCX = valorInvestido + rendimentoBrutoLCX;
 
-        resultadoLCILCAHTML = `
-            <h3>LCI/LCA</h3>
-            Valor da Aplicação: ${formatarMoeda(valorInvestido)}<br>
-            Rendimento Bruto: ${formatarMoeda(rendimentoBrutoLCX)}<br>
-            Valor Líquido: ${formatarMoeda(rendimentoLiquidoLCX)}
-        `;
+        resultadoLCILCAHTML = 
+            `<h3>LCI/LCA</h3>
+            Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
+            Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoLCX)}<br>
+            Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoLCX)}`;
     } else {
         resultadoLCILCAHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa DI.`;
     }
@@ -162,6 +182,9 @@ async function atualizarResultados() {
 const inputs = document.querySelectorAll("#valorInvestido, #tempo, #unidadeTempo, #percentualDI_CDB, #percentualDI_LCX, #taxaDI");
 const atualizarResultadosDebounced = debounce(atualizarResultados, 300);
 inputs.forEach(input => input.addEventListener("input", atualizarResultadosDebounced));
+
+// Adiciona evento de formatação ao campo de valor investido
+document.getElementById("valorInvestido").addEventListener("input", atualizarFormatoCampo);
 
 // Chama a função ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
