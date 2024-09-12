@@ -12,6 +12,7 @@ export const formatarMoeda = (valor) => {
 
 // Função para aplicar máscara monetária
 export const aplicarMascaraMoeda = (valor) => {
+    // Remove caracteres não numéricos e converte para número
     const valorNumerico = parseFloat(valor.replace(/\D/g, '')) / 100;
     return formatarMoeda(valorNumerico);
 };
