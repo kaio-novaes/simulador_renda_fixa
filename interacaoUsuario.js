@@ -4,9 +4,9 @@ import { calcularRendimentoPoupanca } from './calculoPoupanca.js';
 import { calcularRendimentoCDB, calcularAliquotaIR, calcularIOF } from './calculoCDBRDB.js';
 import { calcularRendimentoLCX } from './calculoLCX.js';
 
-// Cache para armazenar taxas e resultados
 let cacheTaxaDI = null;
 let cacheTaxaPoupanca = null;
+let taxaDIDebounceTimeout = null;
 
 // Função debounce para limitar a frequência das atualizações
 function debounce(func, wait) {
@@ -30,6 +30,25 @@ async function atualizarTaxaDI() {
     document.getElementById("taxaDI").value = formatarTaxaDI(cacheTaxaDI);
 }
 
+// Função para reexibir a taxa DI após 5 segundos se o campo estiver vazio
+function reexibirTaxaDISeVazio() {
+    const campoTaxaDI = document.getElementById("taxaDI");
+    if (campoTaxaDI.value === '') {
+        // Cancelar o timeout existente se houver
+        if (taxaDIDebounceTimeout) {
+            clearTimeout(taxaDIDebounceTimeout);
+        }
+        taxaDIDebounceTimeout = setTimeout(() => {
+            atualizarTaxaDI();
+        }, 5000); // 5000 ms = 5 segundos
+    } else {
+        // Limpar o timeout se o campo não estiver vazio
+        if (taxaDIDebounceTimeout) {
+            clearTimeout(taxaDIDebounceTimeout);
+        }
+    }
+}
+
 // Função para atualizar o elemento com a data atual
 function atualizarDataAtual() {
     const elementoData = document.getElementById('dataAtual');
@@ -50,9 +69,7 @@ function extrairValorNumerico(valor) {
 
 // Função para formatar o valor do campo de entrada
 function formatarEntrada(valor) {
-    // Remove tudo o que não é número
     const valorLimpo = valor.replace(/\D/g, '');
-    // Adiciona a formatação
     const valorFormatado = valorLimpo.replace(/(\d)(\d{2})$/, '$1,$2')
                                     .replace(/(\d)(\d{3}),(\d{2})$/, '$1.$2,$3')
                                     .replace(/(\d)(\d{3})\.(\d{3}),(\d{2})$/, '$1.$2.$3,$4');
@@ -109,7 +126,6 @@ async function atualizarResultados() {
     cacheTaxaDI = taxaDIAtualizada;
     cacheTaxaPoupanca = taxaPoupanca;
 
-    // Prepare todos os resultados antes de atualizar o DOM
     let resultadoPoupancaHTML = '';
     let resultadoCDBRDBHTML = '';
     let resultadoLCILCAHTML = '';
@@ -137,13 +153,11 @@ async function atualizarResultados() {
         const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
         const rendimentoLiquidoCDB = valorInvestido + rendimentoBrutoComIOF - ir;
 
-        // Remove classes antigas
         const irIcon = document.querySelector(".ir-icon");
         if (irIcon) {
             irIcon.classList.remove("ir-22-5", "ir-20", "ir-17-5", "ir-15");
         }
 
-        // Adiciona a classe correta com base na alíquota IR
         const irClass = `ir-${aliquotaIR.toString().replace('.', '-')}`;
         
         resultadoCDBRDBHTML = 
@@ -172,7 +186,6 @@ async function atualizarResultados() {
         resultadoLCILCAHTML = `<h3>LCI / LCA</h3> Não foi possível obter a taxa DI.`;
     }
 
-    // Atualize o DOM com os resultados consolidados
     document.getElementById("resultadoPoupanca").innerHTML = resultadoPoupancaHTML;
     document.getElementById("resultadoCDB-RDB").innerHTML = resultadoCDBRDBHTML;
     document.getElementById("resultadoLCI-LCA").innerHTML = resultadoLCILCAHTML;
@@ -185,6 +198,9 @@ inputs.forEach(input => input.addEventListener("input", atualizarResultadosDebou
 
 // Adiciona evento de formatação ao campo de valor investido
 document.getElementById("valorInvestido").addEventListener("input", atualizarFormatoCampo);
+
+// Adiciona evento de monitoramento do campo da taxa DI
+document.getElementById("taxaDI").addEventListener("input", reexibirTaxaDISeVazio);
 
 // Chama a função ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
