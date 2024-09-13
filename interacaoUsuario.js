@@ -17,6 +17,26 @@ function debounce(func, wait) {
     };
 }
 
+// Função throttle para limitar a frequência das atualizações
+function throttle(func, limit) {
+    let lastFunc;
+    let lastRan;
+    return function(...args) {
+        if (!lastRan) {
+            func.apply(this, args);
+            lastRan = Date.now();
+        } else {
+            clearTimeout(lastFunc);
+            lastFunc = setTimeout(() => {
+                if ((Date.now() - lastRan) >= limit) {
+                    func.apply(this, args);
+                    lastRan = Date.now();
+                }
+            }, limit - (Date.now() - lastRan));
+        }
+    };
+}
+
 // Função para atualizar a taxa DI no campo de entrada
 async function atualizarTaxaDI() {
     if (cacheTaxaDI === null) {
@@ -153,11 +173,13 @@ async function atualizarResultados() {
         const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
         const rendimentoLiquidoCDB = valorInvestido + rendimentoBrutoComIOF - ir;
 
+        // Remove classes antigas
         const irIcon = document.querySelector(".ir-icon");
         if (irIcon) {
             irIcon.classList.remove("ir-22-5", "ir-20", "ir-17-5", "ir-15");
         }
 
+        // Adiciona a classe correta com base na alíquota IR
         const irClass = `ir-${aliquotaIR.toString().replace('.', '-')}`;
         
         resultadoCDBRDBHTML = 
@@ -186,14 +208,17 @@ async function atualizarResultados() {
         resultadoLCILCAHTML = `<h3>LCI / LCA</h3> Não foi possível obter a taxa DI.`;
     }
 
-    document.getElementById("resultadoPoupanca").innerHTML = resultadoPoupancaHTML;
-    document.getElementById("resultadoCDB-RDB").innerHTML = resultadoCDBRDBHTML;
-    document.getElementById("resultadoLCI-LCA").innerHTML = resultadoLCILCAHTML;
+    // Atualize o DOM com os resultados consolidados
+    requestAnimationFrame(() => {
+        document.getElementById("resultadoPoupanca").innerHTML = resultadoPoupancaHTML;
+        document.getElementById("resultadoCDB-RDB").innerHTML = resultadoCDBRDBHTML;
+        document.getElementById("resultadoLCI-LCA").innerHTML = resultadoLCILCAHTML;
+    });
 }
 
-// Adiciona evento de mudança ao formulário com debouncing
+// Adiciona evento de mudança ao formulário com debounce e throttle
 const inputs = document.querySelectorAll("#valorInvestido, #tempo, #unidadeTempo, #percentualDI_CDB, #percentualDI_LCX, #taxaDI");
-const atualizarResultadosDebounced = debounce(atualizarResultados, 300);
+const atualizarResultadosDebounced = debounce(throttle(atualizarResultados, 1000), 300);
 inputs.forEach(input => input.addEventListener("input", atualizarResultadosDebounced));
 
 // Adiciona evento de formatação ao campo de valor investido
