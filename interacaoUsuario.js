@@ -1,4 +1,4 @@
-import { formatarTaxaDI, formatarMoeda, formatarData } from './formatacao.js';
+import { formatarTaxaDI, formatarData } from './formatacao.js';
 import { obterTaxaPoupanca, obterTaxaDI } from './api.js';
 import { calcularRendimentoPoupanca } from './calculoPoupanca.js';
 import { calcularRendimentoCDB, calcularAliquotaIR, calcularIOF } from './calculoCDBRDB.js';
@@ -109,7 +109,7 @@ function converterParaDias(tempo, unidade) {
         case 'dias':
             return tempo;
         case 'meses':
-            return Math.round(tempo * 30.41);
+            return Math.round(tempo * 30.41666666666667);
         case 'anos':
             return Math.round(tempo * 365);
         default:
