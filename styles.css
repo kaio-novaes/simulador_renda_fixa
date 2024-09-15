@@ -1,4 +1,4 @@
-/* Reset básico para garantir consistência entre navegadores */
+/* Reset para garantir consistência entre navegadores */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
