@@ -167,8 +167,8 @@ async function atualizarResultados() {
     if (taxaDI !== null) {
         const percentualDI_CDB = parseFloat(document.getElementById("percentualDI_CDB").value) || 100;
         const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI * percentualDI_CDB / 100, dias);
-        const ioef = calcularIOF(valorInvestido, rendimentoBrutoCDB, dias);
-        const rendimentoBrutoComIOF = rendimentoBrutoCDB - ioef;
+        const iof = calcularIOF(valorInvestido, rendimentoBrutoCDB, dias);
+        const rendimentoBrutoComIOF = rendimentoBrutoCDB - iof;
         const aliquotaIR = calcularAliquotaIR(dias);
         const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
         const rendimentoLiquidoCDB = valorInvestido + rendimentoBrutoComIOF - ir;
@@ -185,7 +185,7 @@ async function atualizarResultados() {
         resultadoCDBRDBHTML = 
             `<h3>CDB / RDB</h3>
             Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
-            ${ioef > 0 ? `IOF: ${formatarValorComoMoeda(ioef)}<br>` : ''}
+            ${iof > 0 ? `IOF: ${formatarValorComoMoeda(iof)}<br>` : ''}
             Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoCDB)}<br>
             Imposto de Renda ${formatarValorComoMoeda(ir)} <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span><br> 
             Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoCDB)}`;
