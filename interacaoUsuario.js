@@ -11,7 +11,7 @@ let cacheTaxaPoupanca = null;
 // Função debounce para limitar a frequência das atualizações
 function debounce(func, wait) {
     let timeout;
-    return function(...args) {
+    return function (...args) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(this, args), wait);
     };
@@ -50,12 +50,10 @@ function extrairValorNumerico(valor) {
 
 // Função para formatar o valor do campo de entrada
 function formatarEntrada(valor) {
-    // Remove tudo o que não é número
     const valorLimpo = valor.replace(/\D/g, '');
-    // Adiciona a formatação
     const valorFormatado = valorLimpo.replace(/(\d)(\d{2})$/, '$1,$2')
-                                    .replace(/(\d)(\d{3}),(\d{2})$/, '$1.$2,$3')
-                                    .replace(/(\d)(\d{3})\.(\d{3}),(\d{2})$/, '$1.$2.$3,$4');
+                                      .replace(/(\d)(\d{3}),(\d{2})$/, '$1.$2,$3')
+                                      .replace(/(\d)(\d{3})\.(\d{3}),(\d{2})$/, '$1.$2.$3,$4');
     return `R$ ${valorFormatado}`;
 }
 
@@ -98,6 +96,9 @@ async function atualizarResultados() {
     const unidade = document.getElementById("unidadeTempo").value;
     let taxaDI = parseFloat(document.getElementById("taxaDI").value.replace(',', '.')) || cacheTaxaDI;
 
+    const aporteMensal = extrairValorNumerico(document.getElementById("aporteMensal").value) || 0; // Aporte Mensal
+    const meses = parseInt(document.getElementById("meses").value) || 0; // Número de meses
+
     if (isNaN(valorInvestido) || valorInvestido <= 0 || isNaN(tempo) || tempo <= 0) {
         return;
     }
@@ -116,11 +117,13 @@ async function atualizarResultados() {
 
     // Atualiza o resultado da poupança
     if (cacheTaxaPoupanca !== null) {
-        const rendimentoBrutoPoupanca = calcularRendimentoPoupanca(valorInvestido, cacheTaxaPoupanca, dias);
-        const rendimentoLiquidoPoupanca = valorInvestido + rendimentoBrutoPoupanca;
+        const rendimentoBrutoPoupanca = calcularRendimentoPoupanca(valorInvestido, cacheTaxaPoupanca, aporteMensal, meses);
+        const rendimentoLiquidoPoupanca = valorInvestido + (aporteMensal * meses) + rendimentoBrutoPoupanca; // Corrigido
         resultadoPoupancaHTML = 
             `<h3>Poupança</h3>
             Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
+            Aporte Mensal: ${aporteMensal > 0 ? formatarValorComoMoeda(aporteMensal) : 'Nenhum'}<br>
+            Número de Meses: ${meses}<br>
             Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoPoupanca)}<br>
             Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoPoupanca)}`;
     } else {
@@ -130,12 +133,12 @@ async function atualizarResultados() {
     // Atualiza o resultado do CDB/RDB
     if (taxaDI !== null) {
         const percentualDI_CDB = parseFloat(document.getElementById("percentualDI_CDB").value) || 100;
-        const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI * percentualDI_CDB / 100, dias);
+        const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI * percentualDI_CDB / 100, dias, aporteMensal, meses);
         const ioef = calcularIOF(valorInvestido, rendimentoBrutoCDB, dias);
         const rendimentoBrutoComIOF = rendimentoBrutoCDB - ioef;
         const aliquotaIR = calcularAliquotaIR(dias);
         const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
-        const rendimentoLiquidoCDB = valorInvestido + rendimentoBrutoComIOF - ir;
+        const rendimentoLiquidoCDB = valorInvestido + (aporteMensal * meses) + rendimentoBrutoComIOF - ir; // Corrigido
 
         // Remove classes antigas
         const irIcon = document.querySelector(".ir-icon");
@@ -149,9 +152,11 @@ async function atualizarResultados() {
         resultadoCDBRDBHTML = 
             `<h3>CDB/RDB</h3>
             Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
+            Aporte Mensal: ${aporteMensal > 0 ? formatarValorComoMoeda(aporteMensal) : 'Nenhum'}<br>
+            Número de Meses: ${meses}<br>
             ${ioef > 0 ? `IOF: ${formatarValorComoMoeda(ioef)}<br>` : ''}
             Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoCDB)}<br>
-            Imposto de Renda ${formatarValorComoMoeda(ir)} <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span><br> 
+            Imposto de Renda: ${formatarValorComoMoeda(ir)} <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span><br> 
             Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoCDB)}`;
     } else {
         resultadoCDBRDBHTML = `<h3>CDB/RDB</h3> Não foi possível obter a taxa DI.`;
@@ -161,7 +166,7 @@ async function atualizarResultados() {
     if (taxaDI !== null) {
         const percentualDI_LCX = parseFloat(document.getElementById("percentualDI_LCX").value) || 100;
         const rendimentoBrutoLCX = calcularRendimentoLCX(valorInvestido, taxaDI * percentualDI_LCX / 100, dias);
-        const rendimentoLiquidoLCX = valorInvestido + rendimentoBrutoLCX;
+        const rendimentoLiquidoLCX = valorInvestido + (aporteMensal * meses) + rendimentoBrutoLCX; // Corrigido
 
         resultadoLCILCAHTML = 
             `<h3>LCI/LCA</h3>
@@ -179,12 +184,15 @@ async function atualizarResultados() {
 }
 
 // Adiciona evento de mudança ao formulário com debouncing
-const inputs = document.querySelectorAll("#valorInvestido, #tempo, #unidadeTempo, #percentualDI_CDB, #percentualDI_LCX, #taxaDI");
+const inputs = document.querySelectorAll("#valorInvestido, #tempo, #unidadeTempo, #percentualDI_CDB, #percentualDI_LCX, #taxaDI, #aporteMensal, #meses");
 const atualizarResultadosDebounced = debounce(atualizarResultados, 300);
 inputs.forEach(input => input.addEventListener("input", atualizarResultadosDebounced));
 
 // Adiciona evento de formatação ao campo de valor investido
 document.getElementById("valorInvestido").addEventListener("input", atualizarFormatoCampo);
+
+// Adiciona evento de formatação ao campo de aporte mensal
+document.getElementById("aporteMensal").addEventListener("input", atualizarFormatoCampo);
 
 // Chama a função ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {

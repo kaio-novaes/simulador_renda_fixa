@@ -1,13 +1,22 @@
 const iofTable = [96, 93, 90, 86, 83, 80, 76, 73, 70, 66, 63, 60, 56, 53, 50, 46, 43, 40, 36, 33, 30, 26, 23, 20, 16, 13, 10, 6, 3, 0];
 
-// Função para calcular rendimento de CDB/RDB
-export function calcularRendimentoCDB(valorInvestido, taxaDI, dias) {
+// Função para calcular rendimento de CDB/RDB com aportes mensais
+export function calcularRendimentoCDB(valorInvestido, taxaDI, dias, aporteMensal = 0, meses = 0) {
     const taxaDiaria = (1 + taxaDI / 100) ** (1 / 365) - 1;
     let valorFinal = valorInvestido;
+
+    // Cálculo do rendimento sem aportes mensais
     for (let i = 0; i < dias; i++) {
         valorFinal *= (1 + taxaDiaria);
     }
-    return valorFinal - valorInvestido;
+
+    // Cálculo dos aportes mensais
+    if (aporteMensal > 0 && meses > 0) {
+        const r = taxaDI / 100 / 12; // Taxa mensal
+        valorFinal += aporteMensal * ((1 + r) ** meses - 1) / r;
+    }
+
+    return valorFinal - valorInvestido; // Rendimento total
 }
 
 // Função para calcular a alíquota de IR com base no número de dias
@@ -19,7 +28,7 @@ export function calcularAliquotaIR(dias) {
 }
 
 // Função para calcular o IOF
-export function calcularIOF(valorInvestido, rendimentoBruto, dias) {
+export function calcularIOF(rendimentoBruto, dias) {
     const index = Math.min(dias - 1, 29); // O índice vai de 0 a 29 para 30 dias
     const aliquotaIOF = iofTable[index] / 100; // Convertendo para uma taxa decimal
     return rendimentoBruto * aliquotaIOF;

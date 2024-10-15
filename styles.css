@@ -107,6 +107,17 @@ header {
     overflow: auto; /* Adiciona rolagem se necessário */
 }
 
+.aporte-container {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    display: flex;
+    gap: 15px;
+}
+
 .form-group {
     margin-bottom: 15px;
 }
@@ -141,7 +152,7 @@ input[type="number"] {
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 16px;
-    min-width: 180px;
+    min-width: 180px; /* Ajuste conforme necessário */
 }
 
 .select-container {
@@ -203,8 +214,6 @@ h3 {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: box-shadow 0.3s ease, background-color 0.3s ease;
     overflow: hidden;
-    max-height: none; /* Remove o limite de altura máxima */
-    /* Ajuste o tamanho máximo conforme necessário */
 }
 
 .result-item:hover,
@@ -228,7 +237,6 @@ h3 {
     line-height: 0.5;
     margin-left: 3px; /* Ajuste o espaço entre o texto e o ícone */
     padding: 0 8px; /* Adiciona um pouco de espaço interno horizontal */
-    vertical-align: middle; /* Alinha verticalmente com o texto */
 }
 
 /* Ajuste dos estilos para as classes de alíquota */
@@ -266,12 +274,12 @@ h3 {
 }
 
 /* Estilo do footer com margem de 5px */
-footer {
-    margin: 5px; /* Adiciona uma margem de 5px ao redor do footer */
-    padding: 12px;
+ffooter {
+    background: #333;
+    color: #fff;
+    padding: 15px;
     text-align: center;
-    font-size: 16px;
-    color: #666;
+    margin-top: auto;
 }
 
 /* Telas menores que 768px */
@@ -304,6 +312,16 @@ footer {
     .container {
         flex-direction: column;
         gap: 0;
+    }
+
+    .aporte-container {
+        background: #f9f9f9;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
     .form-container,
@@ -371,6 +389,10 @@ footer {
     }
 
     footer {
-        font-size: 14px; /* Ajusta o tamanho da fonte do rodapé para melhor legibilidade */
+        background: #333;
+        color: #fff;
+        padding: 15px;
+        text-align: center;
+        margin-top: auto;
     }
 }

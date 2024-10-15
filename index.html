@@ -18,7 +18,7 @@
     <main class="container">
         <section class="form-container">
             <h1>Investimentos</h1>
-            <form id="formSimulador">
+            <div class="input-group">
                 <div class="form-group">
                     <label for="valorInvestido">Valor da Aplicação</label>
                     <input type="text" id="valorInvestido" class="input-group__input currency" placeholder="R$ 0,00" required>
@@ -53,7 +53,19 @@
                     <label for="percentualDI_LCX">LCI/LCA:</label>
                     <input type="text" id="percentualDI_LCX" class="input-group__input currency" placeholder="100% DI" step="0.01" min="0">
                 </div>
-            </form>
+            </div>
+
+            <div class="aporte-container">
+                <div class="form-group">
+                    <label for="aporteMensal">Aporte:</label>
+                    <input type="text" id="aporteMensal" class="input-group__input currency" placeholder="R$ 0,00" />
+                </div>
+
+                <div class="form-group">
+                    <label for="meses">Meses:</label>
+                    <input type="number" id="meses" class="input-group__input" placeholder="Número de Meses" min="0" />
+                </div>
+            </div>
         </section>
 
         <section class="results-container">
