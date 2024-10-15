@@ -89,25 +89,35 @@ async function obterTaxas() {
     }
 }
 
+// Função para habilitar/desabilitar campo de aporte mensal
+function verificarAporteMensal(dias) {
+    const aporteField = document.getElementById("aporteMensal");
+    if (dias < 30) {
+        aporteField.disabled = true;
+        aporteField.value = ''; // Limpar o valor se desabilitar
+    } else {
+        aporteField.disabled = false;
+    }
+}
+
 // Função para atualizar os resultados
 async function atualizarResultados() {
     const valorInvestido = extrairValorNumerico(document.getElementById("valorInvestido").value);
     const tempo = parseInt(document.getElementById("tempo").value);
     const unidade = document.getElementById("unidadeTempo").value;
-    let taxaDI = parseFloat(document.getElementById("taxaDI").value.replace(',', '.')) || cacheTaxaDI;
 
-    const aporteMensal = extrairValorNumerico(document.getElementById("aporteMensal").value) || 0; // Aporte Mensal
-    const meses = parseInt(document.getElementById("meses").value) || 0; // Número de meses
+    // Calcule dias corretamente para qualquer unidade
+    const dias = converterParaDias(tempo, unidade);
+    verificarAporteMensal(dias); // Verifica se deve habilitar ou desabilitar o aporte mensal
+    const aporteMensal = extrairValorNumerico(document.getElementById("aporteMensal").value) || 0;
 
     if (isNaN(valorInvestido) || valorInvestido <= 0 || isNaN(tempo) || tempo <= 0) {
         return;
     }
 
-    const dias = converterParaDias(tempo, unidade);
-
     // Obtém taxas e resultados em paralelo
-    const { taxaDI: taxaDIAtualizada, taxaPoupanca } = await obterTaxas();
-    cacheTaxaDI = taxaDIAtualizada;
+    const { taxaDI, taxaPoupanca } = await obterTaxas();
+    cacheTaxaDI = taxaDI;
     cacheTaxaPoupanca = taxaPoupanca;
 
     // Prepare todos os resultados antes de atualizar o DOM
@@ -117,13 +127,14 @@ async function atualizarResultados() {
 
     // Atualiza o resultado da poupança
     if (cacheTaxaPoupanca !== null) {
-        const rendimentoBrutoPoupanca = calcularRendimentoPoupanca(valorInvestido, cacheTaxaPoupanca, aporteMensal, meses);
-        const rendimentoLiquidoPoupanca = valorInvestido + (aporteMensal * meses) + rendimentoBrutoPoupanca; // Corrigido
+        const rendimentoBrutoPoupanca = calcularRendimentoPoupanca(valorInvestido, cacheTaxaPoupanca, aporteMensal, dias);
+        const totalAportesPoupanca = (tempo >= 1) ? (aporteMensal * tempo) : 0; // Aporte contabilizado pelos meses aplicados
+        const rendimentoLiquidoPoupanca = valorInvestido + totalAportesPoupanca + rendimentoBrutoPoupanca;
+
         resultadoPoupancaHTML = 
             `<h3>Poupança</h3>
             Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
-            Aporte Mensal: ${aporteMensal > 0 ? formatarValorComoMoeda(aporteMensal) : 'Nenhum'}<br>
-            Número de Meses: ${meses}<br>
+            ${totalAportesPoupanca > 0 ? `Aportes: ${formatarValorComoMoeda(totalAportesPoupanca)}<br>` : ''}
             Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoPoupanca)}<br>
             Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoPoupanca)}`;
     } else {
@@ -133,12 +144,14 @@ async function atualizarResultados() {
     // Atualiza o resultado do CDB/RDB
     if (taxaDI !== null) {
         const percentualDI_CDB = parseFloat(document.getElementById("percentualDI_CDB").value) || 100;
-        const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI * percentualDI_CDB / 100, dias, aporteMensal, meses);
+        const totalAportesCDB = (tempo >= 1) ? (aporteMensal * tempo) : 0; // Aporte contabilizado pelos meses aplicados
+
+        const rendimentoBrutoCDB = calcularRendimentoCDB(valorInvestido, taxaDI * percentualDI_CDB / 100, dias, aporteMensal, dias);
         const ioef = calcularIOF(valorInvestido, rendimentoBrutoCDB, dias);
         const rendimentoBrutoComIOF = rendimentoBrutoCDB - ioef;
         const aliquotaIR = calcularAliquotaIR(dias);
         const ir = rendimentoBrutoComIOF * (aliquotaIR / 100);
-        const rendimentoLiquidoCDB = valorInvestido + (aporteMensal * meses) + rendimentoBrutoComIOF - ir; // Corrigido
+        const rendimentoLiquidoCDB = valorInvestido + totalAportesCDB + rendimentoBrutoComIOF - ir;
 
         // Remove classes antigas
         const irIcon = document.querySelector(".ir-icon");
@@ -148,12 +161,11 @@ async function atualizarResultados() {
 
         // Adiciona a classe correta com base na alíquota IR
         const irClass = `ir-${aliquotaIR.toString().replace('.', '-')}`;
-        
+
         resultadoCDBRDBHTML = 
             `<h3>CDB/RDB</h3>
             Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
-            Aporte Mensal: ${aporteMensal > 0 ? formatarValorComoMoeda(aporteMensal) : 'Nenhum'}<br>
-            Número de Meses: ${meses}<br>
+            ${totalAportesCDB > 0 ? `Aportes: ${formatarValorComoMoeda(totalAportesCDB)}<br>` : ''}
             ${ioef > 0 ? `IOF: ${formatarValorComoMoeda(ioef)}<br>` : ''}
             Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoCDB)}<br>
             Imposto de Renda: ${formatarValorComoMoeda(ir)} <span class="ir-icon ${irClass}"><span id="aliquotaIR">${aliquotaIR}%</span></span><br> 
@@ -163,18 +175,17 @@ async function atualizarResultados() {
     }
 
     // Atualiza o resultado do LCI/LCA
-    if (taxaDI !== null) {
-        const percentualDI_LCX = parseFloat(document.getElementById("percentualDI_LCX").value) || 100;
-        const rendimentoBrutoLCX = calcularRendimentoLCX(valorInvestido, taxaDI * percentualDI_LCX / 100, dias);
-        const rendimentoLiquidoLCX = valorInvestido + (aporteMensal * meses) + rendimentoBrutoLCX; // Corrigido
+    if (cacheTaxaDI !== null) {
+        const rendimentoBrutoLCI = calcularRendimentoLCX(valorInvestido, cacheTaxaDI, dias);
+        const rendimentoLiquidoLCI = valorInvestido + rendimentoBrutoLCI; // Sem aporte mensal
 
         resultadoLCILCAHTML = 
             `<h3>LCI/LCA</h3>
             Valor da Aplicação: ${formatarValorComoMoeda(valorInvestido)}<br>
-            Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoLCX)}<br>
-            Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoLCX)}`;
+            Rendimento Bruto: ${formatarValorComoMoeda(rendimentoBrutoLCI)}<br>
+            Valor Líquido: ${formatarValorComoMoeda(rendimentoLiquidoLCI)}`;
     } else {
-        resultadoLCILCAHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa DI.`;
+        resultadoLCILCAHTML = `<h3>LCI/LCA</h3> Não foi possível obter a taxa de LCI/LCA.`;
     }
 
     // Atualize o DOM com os resultados consolidados
@@ -183,8 +194,8 @@ async function atualizarResultados() {
     document.getElementById("resultadoLCI-LCA").innerHTML = resultadoLCILCAHTML;
 }
 
-// Adiciona evento de mudança ao formulário com debouncing
-const inputs = document.querySelectorAll("#valorInvestido, #tempo, #unidadeTempo, #percentualDI_CDB, #percentualDI_LCX, #taxaDI, #aporteMensal, #meses");
+// Adiciona ouvintes de eventos
+const inputs = document.querySelectorAll("#valorInvestido, #tempo, #unidadeTempo, #percentualDI_CDB, #taxaDI, #aporteMensal");
 const atualizarResultadosDebounced = debounce(atualizarResultados, 300);
 inputs.forEach(input => input.addEventListener("input", atualizarResultadosDebounced));
 
