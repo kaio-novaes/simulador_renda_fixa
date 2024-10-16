@@ -70,7 +70,7 @@ header {
     transform: translateY(-2px);
 }
 
-/* Ajuste do container principal */
+/* Container principal */
 .container {
     width: 100%;
     max-width: 1200px;
@@ -174,7 +174,7 @@ input[type="number"] {
     color: #666;
     font-size: 12px;
     cursor: pointer;
-    pointer-events: none; /* Remove eventos de clique para garantir que o <select> receba o clique */
+    pointer-events: none; 
 }
 
 .toggle-icon i {
@@ -204,7 +204,6 @@ h3 {
     transition: box-shadow 0.3s ease, background-color 0.3s ease;
     overflow: hidden;
     max-height: none; /* Remove o limite de altura máxima */
-    /* Ajuste o tamanho máximo conforme necessário */
 }
 
 .result-item:hover,
@@ -218,8 +217,8 @@ h3 {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px; /* Largura do ícone */
-    height: 18px; /* Altura do ícone */
+    width: 45px; /* Largura do ícone */
+    height: 20px; /* Altura do ícone */
     border-radius: 12px; /* Bordas bem arredondadas */
     color: #fff; /* Cor do texto dentro do ícone */
     font-size: 12px; /* Tamanho da fonte para o texto */
