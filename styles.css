@@ -227,8 +227,8 @@ h3 {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px; /* Largura do ícone */
-    height: 18px; /* Altura do ícone */
+    width: 45px; /* Largura do ícone */
+    height: 20px; /* Altura do ícone */
     border-radius: 12px; /* Bordas bem arredondadas */
     color: #fff; /* Cor do texto dentro do ícone */
     font-size: 12px; /* Tamanho da fonte para o texto */
@@ -237,6 +237,7 @@ h3 {
     line-height: 0.5;
     margin-left: 3px; /* Ajuste o espaço entre o texto e o ícone */
     padding: 0 8px; /* Adiciona um pouco de espaço interno horizontal */
+    vertical-align: middle; /* Alinha verticalmente com o texto */
 }
 
 /* Ajuste dos estilos para as classes de alíquota */
